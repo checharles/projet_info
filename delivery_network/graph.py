@@ -79,11 +79,52 @@ class Graph:
         """Add the edge to the adjacency list of node1 and node2"""
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
+
+        nb_edges += 1 
     
     
     def get_path_with_power(self, src, dest, power):
-        raise NotImplementedError
-    
+        """this function determine the shortest path, if it exists, between two nodes possible with a certain
+        power
+
+        Parameters: 
+        -----------
+
+        src: NodeType
+            source of path
+        dest: NodeType
+            destination of the path
+        power :  numeric (int or float)
+            power used to travel between the path
+        """
+
+
+        """ Check if there is a path between the source and destination nodes using connected_components_set"""
+
+        path_exists = False
+        
+        for component in self.connected_components():
+            if src in component and dest in component:
+                path_exists = True
+                break
+        """if there is no path, the function return none"""    
+        if not path_exists:
+            return None
+
+        nodes_visited_with_power=list()
+
+        """a recursive function is used to determine the shortest possible path between the nodes"""
+        def dfs_function_with_power(node, component, power):
+            nodes_visited_with_power.add(node)
+            component.add(node)
+            for neighbor in self.graph[node]:
+                if neighbor[0] not in nodes_visited_with_power and power >= power_min:
+                    dfs_function(neighbor[0], component)
+
+        
+
+
+         
     def connected_components(self):
 
         """this function take a graph as an argument and return a list of  
@@ -94,32 +135,32 @@ class Graph:
     
         nodes_visited = list()
 
-        """components is a list of lists containing the  nodes connected to a 
-        precise node"""
+        """components is a list of , each list representing a component 
+        (a set of nodes connected together, i.e a subgraph)"""
         components = list()
         
         """this function is a recursive function enabling depth-first search 
-        (dfs) From a starting node, the function search if one of the neighbor 
+        (dfs). From a starting node, the function search if one of the neighbor 
         node is not visited. If such a node existed,the function visites it 
         and search again for a neighbor node not visited. 
         It goes as far as possible each branch and then do it again in an other 
         branch, until every path beginning with the node is completly visited"""
 
         def dfs_function(node, component):
-            nodes_visited.add(node)
+            c
             component.add(node)
             for neighbor in self.graph[node]:
                 if neighbor[0] not in nodes_visited:
                     dfs_function(neighbor[0], component)
 
         """ the dfs_function is now used in each node in order to visited the 
-        whole graph and to discover every connected nodes."""
+        whole graph and to discover every component."""
 
         for node in self.nodes:
             if node not in nodes_visited:
                 component = []
                 dfs_function(node, component)
-                components.add(components)  
+                components.add(component)  
                
         return components 
 
@@ -165,7 +206,7 @@ class Graph:
 
 
         with open(filename, 'r') as file:
-            nb_nodes, nb_edges = map(int, file.readline().split()) 
+            nb_nodes, m_edge = map(int, file.readline().split()) 
             """the first line of the file is read to extract the number of edges and the number of nodes"""
             graph = [] 
 
@@ -174,9 +215,9 @@ class Graph:
             nodes = list(range(1, nb_nodes +1))
         
             """initializing G, a object from class Graph with nb_nodes nodes"""
-            G = Graph(nodes)
+            G = Graph(nb_nodes)
 
-            for i in range(nb_edges):
+            for i in range(m_edges):
                 line = f.readline().split()
                 node1 = int(line[0])
                 node2 = int(line[1])
