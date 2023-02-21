@@ -110,18 +110,57 @@ class Graph:
         """if there is no path, the function return none"""    
         if not path_exists:
             return None
+        
+        
+        """Create a set of unvisited nodes and initialize the distances to all nodes to infinity"""
+        unvisited_nodes = set(self.graph.keys())
+        distances = {node: float('inf') for node in unvisited}
 
-        nodes_visited_with_power=list()
+        """Create a dictionary to keep track of the previous node in the shortest path"""
+        previous_visited_nodes = {node: None for node in unvisited}
+        
+        distances[src] = 0
+        
 
-        """a recursive function is used to determine the shortest possible path between the nodes"""
-        def dfs_function_with_power(node, component, power):
-            nodes_visited_with_power.add(node)
-            component.add(node)
-            for neighbor in self.graph[node]:
-                if neighbor[0] not in nodes_visited_with_power and power >= power_min:
-                    dfs_function(neighbor[0], component)
+        """ the loop enable to visit every node with help of the Dikjstra algorythm"""
+        while unvisited_nodes : 
+
+            current_node = min(unvisited, key=distances.get)
+            """If the distance to the current node is infinity, the algorythm end"""
+            if distances[current_node] == float('inf'):
+                break
+
+            """  the current node is removed from the unvisited set and the destination is check"""
+            unvisited.remove(current_node)
+
+            """the algorythm is specialize to stop when the minimun distance between src and dest is find"""
+            if current_node == dest:
+                path = []
+                while current_node is not None:
+                    path.append(current_node)
+                    current_node = previous_visited_nodes[current_node]
+                path.reverse()
+            return path, distances[dest]
+
+            """Check the distances to each neighbor of the current node and update 
+            it is shorter than the previous distance """
+            for neighbor, dist in self.graph[current_node]:
+                 if dist <= power:
+                    distance = distances[current_node] + dist
+                
+                    if distance < distances[neighbor]:
+                        distances[neighbor] = distance
+                        previous_visited_nodes[neighbor] = current_node
+
+            return None
+
+        return 
+
+    
 
         
+
+
 
 
          
