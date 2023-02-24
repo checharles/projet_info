@@ -144,13 +144,13 @@ class Graph:
 
             """Check the distances to each neighbor of the current node and update 
             it is shorter than the previous distance """
-            for neighbor, dist in self.graph[current_node]:
-                 if dist <= power:
-                    distance = distances[current_node] + dist
+            for neighbor in self.graph[current_node]:
+                 if neighbor[3] <= power:
+                    distance = distances[current_node] + neighbor[2]
                 
-                    if distance < distances[neighbor]:
-                        distances[neighbor] = distance
-                        previous_visited_nodes[neighbor] = current_node
+                    if distance < distances[neighbor[0]]:
+                        distances[neighbor[0]] = distance
+                        previous_visited_nodes[neighbor[0]] = current_node
 
             return None
 
