@@ -80,7 +80,7 @@ class Graph:
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
 
-        nb_edges += 1 
+         
     
     
     def get_path_with_power(self, src, dest, power):
@@ -108,53 +108,54 @@ class Graph:
                 path_exists = True
                 break
         """if there is no path, the function return none"""    
-        if not path_exists:
+        if  path_exists == False:
             return None
         
         
         """Create a set of unvisited nodes and initialize the distances to all nodes to infinity"""
         unvisited_nodes = set(self.graph.keys())
-        distances = {node: float('inf') for node in unvisited}
+        distances = {node: float('inf') for node in unvisited_nodes}
 
         """Create a dictionary to keep track of the previous node in the shortest path"""
-        previous_visited_nodes = {node: None for node in unvisited}
+        previous_visited_nodes = {node: None for node in unvisited_nodes}
         
         distances[src] = 0
-        
+        path = []
 
         """ the loop enable to visit every node with help of the Dikjstra algorythm"""
         while unvisited_nodes : 
 
-            current_node = min(unvisited, key=distances.get)
+            current_node = min(unvisited_nodes, key=distances.get)
             """If the distance to the current node is infinity, the algorythm end"""
             if distances[current_node] == float('inf'):
                 break
 
             """  the current node is removed from the unvisited set and the destination is check"""
-            unvisited.remove(current_node)
-
+            unvisited_nodes.remove(current_node)
+            
             """the algorythm is specialize to stop when the minimun distance between src and dest is find"""
             if current_node == dest:
-                path = []
+                
                 while current_node is not None:
                     path.append(current_node)
                     current_node = previous_visited_nodes[current_node]
                 path.reverse()
-            return path, distances[dest]
+                return path, distances[dest]
 
             """Check the distances to each neighbor of the current node and update 
             it is shorter than the previous distance """
             for neighbor in self.graph[current_node]:
-                 if neighbor[3] <= power:
+                if neighbor[1] <= power:
                     distance = distances[current_node] + neighbor[2]
                 
                     if distance < distances[neighbor[0]]:
                         distances[neighbor[0]] = distance
                         previous_visited_nodes[neighbor[0]] = current_node
 
-            return None
+          
+          
 
-        return 
+         
 
     
 
@@ -177,7 +178,7 @@ class Graph:
         """components is a list of , each list representing a component 
         (a set of nodes connected together, i.e a subgraph)"""
         components = list()
-        
+    
         """this function is a recursive function enabling depth-first search 
         (dfs). From a starting node, the function search if one of the neighbor 
         node is not visited. If such a node existed,the function visites it 
@@ -186,10 +187,11 @@ class Graph:
         branch, until every path beginning with the node is completly visited"""
 
         def dfs_function(node, component):
-            c
-            component.add(node)
+        
+            component.append(node)
             for neighbor in self.graph[node]:
                 if neighbor[0] not in nodes_visited:
+                    nodes_visited.append(neighbor[0])
                     dfs_function(neighbor[0], component)
 
         """ the dfs_function is now used in each node in order to visited the 
@@ -199,9 +201,10 @@ class Graph:
             if node not in nodes_visited:
                 component = []
                 dfs_function(node, component)
-                components.add(component)  
+                components.append(component)  
                
-        return components 
+        set_components = set(frozenset(component) for component in components)
+        return set_components
 
 
     def connected_components_set(self):
@@ -211,14 +214,37 @@ class Graph:
         """
         """the result components from connected_component is transform in a frozen set by the function"""
         
-        set_components = set(frozenset(component) for component in components)
+        
         return set_components
     
+    def max_power_graph(self):
+        power_max = float('-inf')
+        for node in self.nodes:
+            for neighbor in self.graph[node]: 
+                power_max = max(power_max, neighbor[1]) 
+        return power_max
+
+
     def min_power(self, src, dest):
-        """
-        Should return path, min_power. 
-        """
-        raise NotImplementedError
+        power_max = self.max_power_graph()
+
+        if self.get_path_with_power(src, dest, power_max) is None:
+            return None
+
+        power_min = 0
+        power_needed = (power_max + power_min) / 2
+        path = self.get_path_with_power(src, dest, power_needed)
+
+        while power_max - power_min > 1:
+            if path is not None:
+                power_min = power_needed
+            else:
+                power_max = power_needed
+            power_needed = (power_max + power_min) / 2
+            path = self.get_path_with_power(src, dest, power_needed)
+
+        return path, int(power_needed)
+
 
 
     def graph_from_file(filename):
@@ -245,7 +271,7 @@ class Graph:
 
 
         with open(filename, 'r') as file:
-            nb_nodes, m_edge = map(int, file.readline().split()) 
+            nb_nodes, m_edges = map(int, file.readline().split()) 
             """the first line of the file is read to extract the number of edges and the number of nodes"""
             graph = [] 
 
@@ -254,10 +280,11 @@ class Graph:
             nodes = list(range(1, nb_nodes +1))
         
             """initializing G, a object from class Graph with nb_nodes nodes"""
-            G = Graph(nb_nodes)
+            G = Graph(nodes)
+            nb_edges = m_edges
 
             for i in range(m_edges):
-                line = f.readline().split()
+                line = file.readline().split()
                 node1 = int(line[0])
                 node2 = int(line[1])
                 power_min = int(line[2])
@@ -271,6 +298,17 @@ class Graph:
                 G.add_edge(node1, node2, power_min, dist)
 
         return G
+
+        
+    def represente(self) :
+        g=graphviz.Graph('G', filename='q7.gv', format='png')
+        gf=open(self)
+        gf.readline()
+        gf=gf.readlines()
+        for i in range(0,len(gf)) :
+            gf[i]=gf[i].split()
+            g.edge(gf[i][0], gf[i][1])
+        g.view()
 
 
 
