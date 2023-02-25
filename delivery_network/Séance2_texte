@@ -1,0 +1,41 @@
+Affirmation : 
+
+    soit A un arbre couvrant de poids minimal du graphe G.
+Alors, la puissance minimale pour couvrir un trajet t dans le graphe G est égale à la puissance
+minimale pour couvrir ce trajet t dans le graphe A.
+
+
+
+
+
+
+
+    Démonstration de l’affirmation selon laquelle la puissance minimale pour couvrir un trajet t dans 
+le graphe G est égale à la puissance minimale pour couvrir ce trajet t dans l'arbre couvrant 
+de poids minimal A.
+
+    Soit G un graphe et A un arbre couvrant de poids minimal de G. 
+
+    On suppose que le trajet t est couvert par un ensemble de puissance minimale d'arêtes E dans G, 
+et qu'il est également couvert par un ensemble d'arêtes E' dans A. 
+
+    Montrons que E' est aussi un ensemble dont la puissance nécessaire pour couvrir t dans G est
+minimal.
+
+    Supposons par l'absurde que E' ne soit pas un ensemble dont la puissance pour couvrir t dans G 
+n'est minimale. 
+ 
+    Il  existe donc un autre ensemble d'arêtes E'' dans G tel que la puissance requise pour
+couvrir t avec E'' est inférieure à celle requise pour couvrir t avec E'. Puisque E' est un ensemble 
+dont la puissance pour couvrir t dans A est minimal, la puissance requise pour couvrir t avec E'' doit
+être supérieure à celle requise pour couvrir t avec E'' (car E'' est un sous-ensemble de E'). 
+Cela implique que la puissance requise pour couvrir t avec E' est supérieure à celle requise pour
+couvrir t avec E' dans G. Cependant, E'' est un ensemble dont la puissance est minimale pour couvrir t
+dans G,
+On aboutit à une contradiction.
+
+    On en déduit que E' doit être un ensemble dont la puissance  pour  couvrir t dans G est minimal.
+    
+    Ainsi, la puissance minimale pour couvrir un trajet t dans le graphe G est égale à la puissance
+minimale pour couvrir ce trajet t dans l'arbre couvrant de poids minimal A.
+ 
