@@ -335,15 +335,18 @@ class Graph:
         rank = {node: 0 for node in self.graph}
 
         mst = Graph(nodes=self.nodes)
-
+        mst.nb_edges = 0
         """ it now iterate over edges and add them to the MST if they don't create a cycle"""
         for edge in edges:
             node1, node2, power, dist = edge
             if self.find(parent, node1) != self.find(parent, node2):
                 mst.add_edge(node1, node2, power, dist)
                 self.union(parent, rank, node1, node2)
+                mst.nb_edges += 1
 
         return mst
+
+    def 
 
             
         

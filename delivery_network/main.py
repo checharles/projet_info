@@ -1,7 +1,7 @@
 from graph import Graph
 
 data_path = "/home/onyxia/projet_info/input/"
-file_name = "network.04.in"
+file_name = "network.1.in"
 g = Graph.graph_from_file(data_path + file_name)
 print(g)
 print(Graph.connected_components(g))
