@@ -42,7 +42,7 @@ class Graph:
                 output += f"{source}-->{destination}\n"
         return output
     
-    def add_edge(self, node1, node2, power_min, dist=1):
+    def add_edge(self, node1, node2, power_min, dist):
         """
         Adds an edge to the graph. Graphs are not oriented, hence an edge is 
         added to the adjacency list of both end nodes. 
@@ -151,19 +151,6 @@ class Graph:
                     if distance < distances[neighbor[0]]:
                         distances[neighbor[0]] = distance
                         previous_visited_nodes[neighbor[0]] = current_node
-
-          
-          
-
-         
-
-    
-
-        
-
-
-
-
          
     def connected_components(self):
 
@@ -281,7 +268,7 @@ class Graph:
         
             """initializing G, a object from class Graph with nb_nodes nodes"""
             G = Graph(nodes)
-            nb_edges = m_edges
+            G.nb_edges = m_edges
 
             for i in range(m_edges):
                 line = file.readline().split()
@@ -299,8 +286,10 @@ class Graph:
 
         return G
 
-        
-    def represente(self) :
+    
+
+    def draw_graph(self) :
+        import graphviz 
         g=graphviz.Graph('G', filename='q7.gv', format='png')
         gf=open(self)
         gf.readline()
@@ -310,7 +299,51 @@ class Graph:
             g.edge(gf[i][0], gf[i][1])
         g.view()
 
+    """the following functions are used in the Krustal algorythm"""
 
+    """This function search the root of the tree""" 
+    def find(self, parent, i):
+        if parent[i] == i:
+            return i
+        return self.find(parent, parent[i])
+
+    """This function allow to union by rank"""
+    def union(self, parent, rank, x, y):
+        xroot = self.find(parent, x)
+        yroot = self.find(parent, y)
+
+        if rank[xroot] < rank[yroot]:
+            parent[xroot] = yroot
+        elif rank[xroot] > rank[yroot]:
+            parent[yroot] = xroot
+        else:
+            parent[yroot] = xroot
+            rank[xroot] += 1
+
+    def kruskal(self):
+        
+
+        """initializing the edges and the minimun spanning tree (mst)"""
+        edges = []
+        for node in self.graph:
+            for neighbor in self.graph[node]:
+                edges.append((node, neighbor[0], neighbor[1],neighbor[2]))
+        edges.sort(key=lambda edge: edge[2])
+
+        
+        parent = {node: node for node in self.graph}
+        rank = {node: 0 for node in self.graph}
+
+        mst = Graph(nodes=self.nodes)
+
+        """ it now iterate over edges and add them to the MST if they don't create a cycle"""
+        for edge in edges:
+            node1, node2, power, dist = edge
+            if self.find(parent, node1) != self.find(parent, node2):
+                mst.add_edge(node1, node2, power, dist)
+                self.union(parent, rank, node1, node2)
+
+        return mst
 
             
         
