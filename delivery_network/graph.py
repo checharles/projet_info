@@ -108,7 +108,7 @@ class Graph:
                 path_exists = True
                 break
         """if there is no path, the function return none"""    
-        if  path_exists == False:
+        if  path_exists is False:
             return None
         
         
@@ -155,7 +155,16 @@ class Graph:
     def connected_components(self):
 
         """this function take a graph as an argument and return a list of  
-        every connected nodes in the graph """
+        every connected nodes in the graph
+
+        Outputs : 
+        -----------
+        set_components : a set of frozensets
+            a set of frozensets of connecting components
+        
+        """
+
+       
 
         """indicate the nodes visited during the search for the connected 
         component"""
@@ -166,15 +175,16 @@ class Graph:
         (a set of nodes connected together, i.e a subgraph)"""
         components = list()
     
-        """this function is a recursive function enabling depth-first search 
+        
+
+        def dfs_function(node, component):
+            """this function is a recursive function enabling depth-first search 
         (dfs). From a starting node, the function search if one of the neighbor 
         node is not visited. If such a node existed,the function visites it 
         and search again for a neighbor node not visited. 
         It goes as far as possible each branch and then do it again in an other 
-        branch, until every path beginning with the node is completly visited"""
-
-        def dfs_function(node, component):
-        
+        branch, until every path beginning with the node is completly visited
+        """
             component.append(node)
             for neighbor in self.graph[node]:
                 if neighbor[0] not in nodes_visited:
@@ -205,6 +215,14 @@ class Graph:
         return set_components
     
     def max_power_graph(self):
+        """this function finds the maximun power of an edge in the whole graph
+        
+        Outputs : 
+        -----------
+        power_max : int
+            the maximun power find in a graph
+        """
+        
         power_max = float('-inf')
         for node in self.nodes:
             for neighbor in self.graph[node]: 
@@ -213,6 +231,27 @@ class Graph:
 
 
     def min_power(self, src, dest):
+        """This function uses binary research to find the minimun power needed to trvael between 
+        two nodes, called src and dest
+        
+        Parameters : 
+        -----------
+        src: NodeType
+            First end (node) of the path
+        dest: NodeType
+            Second end (node) of the path
+
+
+        Outputs: 
+        -----------
+        path: a list of nodes
+            indicate the nodes in the order they are visited to ravel between src and dest
+
+        power_needed : integer
+            the minimum power needed to be enable to travel between the node src and the node dest.
+        """
+
+    
         power_max = self.max_power_graph()
 
         if self.get_path_with_power(src, dest, power_max) is None:
@@ -229,8 +268,11 @@ class Graph:
                 power_max = power_needed
             power_needed = (power_max + power_min) / 2
             path = self.get_path_with_power(src, dest, power_needed)
+        power_needed = int(power_needed)
 
-        return path, int(power_needed)
+        return path, power_needed
+
+        
 
 
 
@@ -247,24 +289,26 @@ class Graph:
         Parameters: 
         -----------
         filename: str
-        The name of the file
+            The name of the file
 
         Outputs: 
         -----------
         G: Graph
-        An object of the class Graph with the graph from file_name.
+            An object of the class Graph with the graph from file_name.
         """
 
 
 
         with open(filename, 'r') as file:
+
+            
             nb_nodes, m_edges = map(int, file.readline().split()) 
             """the first line of the file is read to extract the number of edges and the number of nodes"""
-            graph = [] 
+            
 
             """creating the nodes for the graph as a list of nb_nodes elements """
 
-            nodes = list(range(1, nb_nodes +1))
+            nodes = list(range(1, nb_nodes + 1))
         
             """initializing G, a object from class Graph with nb_nodes nodes"""
             G = Graph(nodes)
@@ -284,14 +328,17 @@ class Graph:
 
                 G.add_edge(node1, node2, power_min, dist)
 
+        G.file = filename
+
         return G
 
     
 
     def draw_graph(self) :
+        """this fucntion draw a graph with the help of the modul graphviz"""
         import graphviz 
         g=graphviz.Graph('G', filename='q7.gv', format='png')
-        gf=open(self)
+        gf=open(self.file)
         gf.readline()
         gf=gf.readlines()
         for i in range(0,len(gf)) :
@@ -299,16 +346,31 @@ class Graph:
             g.edge(gf[i][0], gf[i][1])
         g.view()
 
-    """the following functions are used in the Krustal algorythm"""
 
-    """This function search the root of the tree""" 
+    """the functions find() and union() are used in the Krustal algorythm and help to apply the
+     UnionFind type of structure to the object of Graph class"""
+
+    
     def find(self, parent, i):
+        """This function search the root of the tree in the Krustak algorythm. 
+        Parameters : 
+        -----------
+        parent : dictionnary of nodes, use in the Unionfind structure 
+            a parent is define as the representant of the disjoinct set it belongs. At the beginning of the 
+            algorythm, each node is its parent
+
+        i : NodeType 
+            the function find() search the root of the set to which i belongs
+        """ 
         if parent[i] == i:
             return i
         return self.find(parent, parent[i])
 
-    """This function allow to union by rank"""
+    
     def union(self, parent, rank, x, y):
+        """This function allow to union by rank. It merges two trees, with the the parent with the 
+        higher becoming the parent of the new tree. The rank is define by the total distance linked 
+        to the parent """
         xroot = self.find(parent, x)
         yroot = self.find(parent, y)
 
@@ -321,7 +383,13 @@ class Graph:
             rank[xroot] += 1
 
     def kruskal(self):
+        """this function implement the Kruskal algorytm
         
+        Output :
+        -----------
+        mst : GraphType
+            the minimun spanning tree from self
+        """
 
         """initializing the edges and the minimun spanning tree (mst)"""
         edges = []
@@ -346,7 +414,26 @@ class Graph:
 
         return mst
 
-    def 
+    def min_power_greedy(self, src, dest):
+        """this function find the minimun power needed to travel from src to dest using the minimun spanning 
+        tree of self
+
+        Parameters : 
+        -----------
+        src  : NodeType
+            the source node of the traject
+        dest : NodeType
+            the destination node of the traject
+        
+        """
+    
+        mst = self.kruskal()
+        greedy_solution = mst.min_power(src, dest)
+        
+        return greedy_solution
+
+
+    
 
             
         
