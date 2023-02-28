@@ -122,18 +122,86 @@ class Graph:
         distances[src] = 0
         path = []
 
-        """ the loop enable to visit every node with help of the Dikjstra algorythm"""
-        while unvisited_nodes : 
+        """ the loop enable to visit every node with help of the Dikjstra algorytm"""
+        while unvisited_nodes is not None: 
 
             current_node = min(unvisited_nodes, key=distances.get)
-            """If the distance to the current node is infinity, the algorythm end"""
+            """If the distance to the current node is infinity, the algoryhm end"""
             if distances[current_node] == float('inf'):
                 break
 
             """  the current node is removed from the unvisited set and the destination is check"""
             unvisited_nodes.remove(current_node)
             
-            """the algorythm is specialize to stop when the minimun distance between src and dest is find"""
+            """the algorytm is specialize to stop when the minimun distance between src and dest is find"""
+            if current_node == dest:
+                
+                while current_node is not None:
+                    path.append(current_node)
+                    current_node = previous_visited_nodes[current_node]
+                path.reverse()
+                return path, distances[dest]
+
+            """Check the distances to each neighbor of the current node and update 
+            it is shorter than the previous distance """
+            for neighbor in self.graph[current_node]:
+                if neighbor[1] <= power:
+                    distance = distances[current_node] + neighbor[2]
+                
+                    if distance < distances[neighbor[0]]:
+                        distances[neighbor[0]] = distance
+
+    def get_path_with_power(self, src, dest, power):
+        """this function determine the shortest path, if it exists, between two nodes possible with a certain
+        power
+
+        Parameters: 
+        -----------
+
+        src: NodeType
+            source of path
+        dest: NodeType
+            destination of the path
+        power :  numeric (int or float)
+            power used to travel between the path
+        """
+
+
+        """ Check if there is a path between the source and destination nodes using connected_components_set"""
+
+        path_exists = False
+        
+        for component in self.connected_components():
+            if src in component and dest in component:
+                path_exists = True
+                break
+        """if there is no path, the function return none"""    
+        if  path_exists is False:
+            return None
+        
+        
+        """Create a set of unvisited nodes and initialize the distances to all nodes to infinity"""
+        unvisited_nodes = set(self.graph.keys())
+        distances = {node: float('inf') for node in unvisited_nodes}
+
+        """Create a dictionary to keep track of the previous node in the shortest path"""
+        previous_visited_nodes = {node: None for node in unvisited_nodes}
+        
+        distances[src] = 0
+        path = []
+
+        """ the loop enable to visit every node with help of the Dikjstra algorytm"""
+        while unvisited_nodes : 
+
+            current_node = min(unvisited_nodes, key=distances.get)
+            """If the distance to the current node is infinity, the algoryhm end"""
+            if distances[current_node] == float('inf'):
+                break
+
+            """  the current node is removed from the unvisited set and the destination is check"""
+            unvisited_nodes.remove(current_node)
+            
+            """the algorytm is specialize to stop when the minimun distance between src and dest is find"""
             if current_node == dest:
                 
                 while current_node is not None:
@@ -151,6 +219,7 @@ class Graph:
                     if distance < distances[neighbor[0]]:
                         distances[neighbor[0]] = distance
                         previous_visited_nodes[neighbor[0]] = current_node
+                        
          
     def connected_components(self):
 
@@ -231,7 +300,7 @@ class Graph:
 
 
     def min_power(self, src, dest):
-        """This function uses binary research to find the minimun power needed to trvael between 
+        """This function uses binary research to find the minimun power needed to travel between 
         two nodes, called src and dest
         
         Parameters : 
@@ -267,8 +336,10 @@ class Graph:
             else:
                 power_max = power_needed
             power_needed = (power_max + power_min) / 2
+
             path = self.get_path_with_power(src, dest, power_needed)
-        power_needed = int(power_needed)
+
+        power_needed = int(power_needed) + 1
 
         return path, power_needed
 
@@ -427,8 +498,7 @@ class Graph:
         
         """
     
-        mst = self.kruskal()
-        greedy_solution = mst.min_power(src, dest)
+        greedy_solution = Graph.min_power(self.kruskal(), src, dest)
         
         return greedy_solution
 
