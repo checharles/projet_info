@@ -82,10 +82,11 @@ class Graph:
 
          
     
-    
+        
+
     def get_path_with_power(self, src, dest, power):
-        """this function determine the shortest path, if it exists, between two nodes possible with a certain
-        power
+        """this function determine the shortest path, if it exists, between two nodes 
+        possible with a certain power
 
         Parameters: 
         -----------
@@ -108,7 +109,7 @@ class Graph:
                 path_exists = True
                 break
         """if there is no path, the function return none"""    
-        if  path_exists is False:
+        if path_exists is False:
             return None
         
         
@@ -116,17 +117,17 @@ class Graph:
         unvisited_nodes = set(self.graph.keys())
         distances = {node: float('inf') for node in unvisited_nodes}
 
-        """Create a dictionary to keep track of the previous node in the shortest path"""
+        """Create a dictionary to keep track of the previous node in the shortest path to a node"""
         previous_visited_nodes = {node: None for node in unvisited_nodes}
         
         distances[src] = 0
         path = []
 
         """ the loop enable to visit every node with help of the Dikjstra algorytm"""
-        while unvisited_nodes is not None: 
-
+        while unvisited_nodes: 
+            
             current_node = min(unvisited_nodes, key=distances.get)
-            """If the distance to the current node is infinity, the algoryhm end"""
+            """If the distance to the current node is infinity, the algorytm end"""
             if distances[current_node] == float('inf'):
                 break
 
@@ -135,75 +136,7 @@ class Graph:
             
             """the algorytm is specialize to stop when the minimun distance between src and dest is find"""
             if current_node == dest:
-                
-                while current_node is not None:
-                    path.append(current_node)
-                    current_node = previous_visited_nodes[current_node]
-                path.reverse()
-                return path, distances[dest]
-
-            """Check the distances to each neighbor of the current node and update 
-            it is shorter than the previous distance """
-            for neighbor in self.graph[current_node]:
-                if neighbor[1] <= power:
-                    distance = distances[current_node] + neighbor[2]
-                
-                    if distance < distances[neighbor[0]]:
-                        distances[neighbor[0]] = distance
-
-    def get_path_with_power(self, src, dest, power):
-        """this function determine the shortest path, if it exists, between two nodes possible with a certain
-        power
-
-        Parameters: 
-        -----------
-
-        src: NodeType
-            source of path
-        dest: NodeType
-            destination of the path
-        power :  numeric (int or float)
-            power used to travel between the path
-        """
-
-
-        """ Check if there is a path between the source and destination nodes using connected_components_set"""
-
-        path_exists = False
-        
-        for component in self.connected_components():
-            if src in component and dest in component:
-                path_exists = True
-                break
-        """if there is no path, the function return none"""    
-        if  path_exists is False:
-            return None
-        
-        
-        """Create a set of unvisited nodes and initialize the distances to all nodes to infinity"""
-        unvisited_nodes = set(self.graph.keys())
-        distances = {node: float('inf') for node in unvisited_nodes}
-
-        """Create a dictionary to keep track of the previous node in the shortest path"""
-        previous_visited_nodes = {node: None for node in unvisited_nodes}
-        
-        distances[src] = 0
-        path = []
-
-        """ the loop enable to visit every node with help of the Dikjstra algorytm"""
-        while unvisited_nodes : 
-
-            current_node = min(unvisited_nodes, key=distances.get)
-            """If the distance to the current node is infinity, the algoryhm end"""
-            if distances[current_node] == float('inf'):
-                break
-
-            """  the current node is removed from the unvisited set and the destination is check"""
-            unvisited_nodes.remove(current_node)
             
-            """the algorytm is specialize to stop when the minimun distance between src and dest is find"""
-            if current_node == dest:
-                
                 while current_node is not None:
                     path.append(current_node)
                     current_node = previous_visited_nodes[current_node]
@@ -314,7 +247,7 @@ class Graph:
         Outputs: 
         -----------
         path: a list of nodes
-            indicate the nodes in the order they are visited to ravel between src and dest
+            indicate the nodes in the order they are visited to travel between src and dest
 
         power_needed : integer
             the minimum power needed to be enable to travel between the node src and the node dest.
@@ -327,19 +260,25 @@ class Graph:
             return None
 
         power_min = 0
-        power_needed = (power_max + power_min) / 2
+        power_needed = power_max 
+
         path = self.get_path_with_power(src, dest, power_needed)
 
         while power_max - power_min > 1:
-            if path is not None:
+            
+            if path is None:
                 power_min = power_needed
             else:
                 power_max = power_needed
-            power_needed = (power_max + power_min) / 2
 
-            path = self.get_path_with_power(src, dest, power_needed)
+            power_needed = (power_max + power_min) //2
 
-        power_needed = int(power_needed) + 1
+            path = self.get_path_with_power(src, dest,power_needed )
+        
+        power_needed = power_needed + 1
+        path = self.get_path_with_power(src, dest,power_needed )
+
+        
 
         return path, power_needed
 
