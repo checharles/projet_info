@@ -4,7 +4,7 @@ from math import factorial
 data_path = "/home/onyxia/projet_info/input/"
 
 """opening each file and calcuting the time """
-for i in range (1,11):
+for i in range(1,11):
     file_name = f"routes.{i}.in"
     g = Graph.graph_from_file(data_path + file_name)
 
