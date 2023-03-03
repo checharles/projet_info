@@ -442,8 +442,31 @@ class Graph:
         return greedy_solution
 
 
+
+       
     
 
+    def display_graph(self):
+        import graphviz
+        """
+        This function displays a graph with the help graphviz
+        """
+        dot = graphviz.Graph()
+    
+        """add node"""
+        for node in self.nodes:
+            dot.node(str(node))
+    
+        """add edge"""
+        
+        for node in self.nodes:
+            for neighbor in self.graph[node]:
+                dot.edge(str(node), str(neighbor[0]), label=str(neighbor[1]))
+                    
+        """display of the graph"""
+        dot.render('example', format='dot', view=True)
+
+    
             
         
         
