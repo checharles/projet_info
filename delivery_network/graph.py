@@ -97,6 +97,12 @@ class Graph:
             destination of the path
         power :  numeric (int or float)
             power used to travel between the path
+
+        Outputs : 
+        path : list
+            a list of node to travel to src from dest
+        distances[dest] : int
+            the lenght of the path in distance
         """
 
 
@@ -286,62 +292,7 @@ class Graph:
 
 
 
-    def graph_from_file(filename):
-        """
-        Reads a text file and returns the graph as an object of the Graph class.
-
-        The file should have the following format: 
-        The first line of the file is 'n m'
-        The next m lines have 'node1 node2 power_min dist' or 'node1 node2 power_min' (if dist is missing, it will be set to 1 by default)
-        The nodes (node1, node2) should be named 1..n
-        All values are integers.
-
-        Parameters: 
-        -----------
-        filename: str
-            The name of the file
-
-        Outputs: 
-        -----------
-        G: Graph
-            An object of the class Graph with the graph from file_name.
-        """
-
-
-
-        with open(filename, 'r') as file:
-
-            
-            nb_nodes, m_edges = map(int, file.readline().split()) 
-            """the first line of the file is read to extract the number of edges and the number of nodes"""
-            
-
-            """creating the nodes for the graph as a list of nb_nodes elements """
-
-            nodes = list(range(1, nb_nodes + 1))
-        
-            """initializing G, a object from class Graph with nb_nodes nodes"""
-            G = Graph(nodes)
-            G.nb_edges = m_edges
-
-            for i in range(m_edges):
-                line = file.readline().split()
-                node1 = int(line[0])
-                node2 = int(line[1])
-                power_min = int(line[2])
-
-                """checking if the distance is indicated, else default value is 1"""
-                if len(line) == 4: 
-                    dist = int(line[3])
-                else:
-                    dist = 1
-
-                G.add_edge(node1, node2, power_min, dist)
-
-        G.file = filename
-
-        return G
-
+    
     
 
     def draw_graph(self) :
@@ -467,7 +418,59 @@ class Graph:
         dot.render('example', format='dot', view=True)
 
     
+
+def graph_from_file(filename):
+        """
+        Reads a text file and returns the graph as an object of the Graph class.
+
+        The file should have the following format: 
+        The first line of the file is 'n m'
+        The next m lines have 'node1 node2 power_min dist' or 'node1 node2 power_min' (if dist is missing, it will be set to 1 by default)
+        The nodes (node1, node2) should be named 1..n
+        All values are integers.
+
+        Parameters: 
+        -----------
+        filename: str
+            The name of the file
+
+        Outputs: 
+        -----------
+        G: Graph
+            An object of the class Graph with the graph from file_name.
+        """
+
+
+
+        with open(filename, 'r') as file:
+
             
+            nb_nodes, m_edges = map(int, file.readline().split()) 
+            """the first line of the file is read to extract the number of edges and the number of nodes"""
+            
+
+            """creating the nodes for the graph as a list of nb_nodes elements """
+
+            nodes = list(range(1, nb_nodes + 1))
         
-        
-    
+            """initializing G, a object from class Graph with nb_nodes nodes"""
+            G = Graph(nodes)
+            G.nb_edges = m_edges
+
+            for i in range(m_edges):
+                line = file.readline().split()
+                node1 = int(line[0])
+                node2 = int(line[1])
+                power_min = int(line[2])
+
+                """checking if the distance is indicated, else default value is 1"""
+                if len(line) == 4: 
+                    dist = int(line[3])
+                else:
+                    dist = 1
+
+                G.add_edge(node1, node2, power_min, dist)
+
+        G.file = filename
+
+        return G

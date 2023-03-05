@@ -1,6 +1,6 @@
 # This will work if ran from the root folder.
 import sys 
-sys.path.append("delivery_network/")
+sys.path.append("delivery_network")
 
 import unittest 
 from graph import Graph, graph_from_file
@@ -21,6 +21,12 @@ class Test_GraphLoading(unittest.TestCase):
         self.assertEqual(g.nb_nodes, 10)
         self.assertEqual(g.nb_edges, 4)
         self.assertEqual(g.graph[1][0][2], 6)
+
+    def test_network5(self):
+        g = graph_from_file("input/network.05.in")
+        self.assertEqual(g.nb_nodes, 4)
+        self.assertEqual(g.nb_edges, 6)
+        self.assertEqual(g.graph[1][2][2], 4)
 
 if __name__ == '__main__':
     unittest.main()
