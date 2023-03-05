@@ -110,7 +110,7 @@ class Graph:
 
         path_exists = False
         
-        for component in self.connected_components():
+        for component in self.connected_components_set():
             if src in component and dest in component:
                 path_exists = True
                 break
@@ -147,7 +147,9 @@ class Graph:
                     path.append(current_node)
                     current_node = previous_visited_nodes[current_node]
                 path.reverse()
-                return path, distances[dest]
+
+                lenght_path = distances[dest]
+                return path
 
             """Check the distances to each neighbor of the current node and update 
             it is shorter than the previous distance """
@@ -160,7 +162,7 @@ class Graph:
                         previous_visited_nodes[neighbor[0]] = current_node
                         
          
-    def connected_components(self):
+    def connected_components_set(self):
 
         """this function take a graph as an argument and return a list of  
         every connected nodes in the graph
@@ -212,7 +214,7 @@ class Graph:
         return set_components
 
 
-    def connected_components_set(self):
+    def connected_components_setbis(self):
         """
         The result should be a set of frozensets (one per component), 
         For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
@@ -295,19 +297,7 @@ class Graph:
     
     
 
-    def draw_graph(self) :
-        """this fucntion draw a graph with the help of the modul graphviz"""
-        import graphviz 
-        g=graphviz.Graph('G', filename='q7.gv', format='png')
-        gf=open(self.file)
-        gf.readline()
-        gf=gf.readlines()
-        for i in range(0,len(gf)) :
-            gf[i]=gf[i].split()
-            g.edge(gf[i][0], gf[i][1])
-        g.view()
-
-
+    
     """the functions find() and union() are used in the Krustal algorythm and help to apply the
      UnionFind type of structure to the object of Graph class"""
 
@@ -348,7 +338,7 @@ class Graph:
         
         Output :
         -----------
-        mst : GraphType
+        g_mst : GraphType
             the minimun spanning tree from self
         """
 
@@ -363,17 +353,17 @@ class Graph:
         parent = {node: node for node in self.graph}
         rank = {node: 0 for node in self.graph}
 
-        mst = Graph(nodes=self.nodes)
-        mst.nb_edges = 0
+        g_mst = Graph(nodes=self.nodes)
+        g_mst.nb_edges = 0
         """ it now iterate over edges and add them to the MST if they don't create a cycle"""
         for edge in edges:
             node1, node2, power, dist = edge
             if self.find(parent, node1) != self.find(parent, node2):
-                mst.add_edge(node1, node2, power, dist)
+                g_mst.add_edge(node1, node2, power, dist)
                 self.union(parent, rank, node1, node2)
-                mst.nb_edges += 1
+                g_mst.nb_edges += 1
 
-        return mst
+        return g_mst
 
     def min_power_greedy(self, src, dest):
         """this function find the minimun power needed to travel from src to dest using the minimun spanning 
@@ -398,10 +388,13 @@ class Graph:
     
 
     def display_graph(self):
+
+        """
+        This function displays a graph with the help of graphviz
+        """
+
         import graphviz
-        """
-        This function displays a graph with the help graphviz
-        """
+        
         dot = graphviz.Graph()
     
         """add node"""
@@ -409,13 +402,40 @@ class Graph:
             dot.node(str(node))
     
         """add edge"""
-        
+        edges = set()
+
         for node in self.nodes:
             for neighbor in self.graph[node]:
-                dot.edge(str(node), str(neighbor[0]), label=str(neighbor[1]))
+                edge = tuple(sorted([node, neighbor[0]])) 
+                if edge not in edges: 
+                    edges.add(edge)
+                    dot.edge(str(edge[0]), str(edge[1]), label=str(neighbor[1]))
                     
         """display of the graph"""
-        dot.render('example', format='dot', view=True)
+        dot.render('graph G', format='png', view=True)
+
+        return dot
+
+    def display_path(self, dest, src) : 
+
+        graph_with_path = self.display_graph()
+
+        travel = self.min_power(dest, src)
+
+        if travel is None:
+            return None
+
+        for i in range(0, len(travel[0]) - 1):
+            edge = tuple(sorted([travel[0][i], travel[0][i+1]]))
+            graph_with_path.edge(str(edge[0]), str(edge[1]), color='blue')
+            graph_with_path.node(str(travel[0][i]), color='blue', style='filled')
+
+        graph_with_path.node(str(travel[0][-1]), color='blue', style='filled')
+        
+        """display of the graph"""
+        graph_with_path.render('path in the graph G', format='png', view=True)
+
+
 
     
 

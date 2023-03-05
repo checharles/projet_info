@@ -11,7 +11,7 @@ for i in range(1 ,11):
     file_name = f"network.{i}.in"
     route_name = f"routes.{i}.in"
     g = graph_from_file(data_path + file_name)
-
+    g_mst = Graph.kruskal(g)
     with open(data_path + route_name, 'r') as file: 
         nb_travel = int(file.readline())
         print("il y a ", nb_travel, "trajets")
@@ -26,7 +26,7 @@ for i in range(1 ,11):
                     
             start_time = time.perf_counter()
 
-            Graph.min_power(g, src, dest)
+            Graph.min_power(g_mst, src, dest)
 
             end_time = time.perf_counter()
 
@@ -36,6 +36,6 @@ for i in range(1 ,11):
         execution_time_mean = mean(time_list)
         total_time = execution_time_mean*nb_travel
         print("Le temps d'exécution moyen est de :", execution_time_mean/60, "minutes")
-        print("Le temps total pour calculer l'ensemble des trajets  du graphe ", {i}, "est : """, total_time/3600, "heures")
+        print("Le temps total pour calculer l'ensemble des trajets du graphe ", {i}, "en utilisant un arbre couvrant est : """, total_time/3600, "heures")
 
     

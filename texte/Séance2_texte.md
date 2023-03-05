@@ -1,18 +1,17 @@
-Affirmation : 
+Ce document contient la réponse à la question 2 de la séance 2
+
+
+
+# Affirmation : 
 
     soit A un arbre couvrant de poids minimal du graphe G.
 Alors, la puissance minimale pour couvrir un trajet t dans le graphe G est égale à la puissance
 minimale pour couvrir ce trajet t dans le graphe A.
 
 
-
-
-
-
-
-    Démonstration de l’affirmation selon laquelle la puissance minimale pour couvrir un trajet t dans 
-le graphe G est égale à la puissance minimale pour couvrir ce trajet t dans l'arbre couvrant 
-de poids minimal A.
+# Démonstration de l’affirmation selon laquelle la puissance minimale pour couvrir un trajet t dans 
+# le graphe G est égale à la puissance minimale pour couvrir ce trajet t dans l'arbre couvrant 
+# de poids minimal A.
 
     Soit G un graphe et A un arbre couvrant de poids minimal de G. 
 
