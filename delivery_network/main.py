@@ -1,5 +1,5 @@
 from graph import Graph, graph_from_file
-import graphviz
+#import graphviz
 
 data_path = "/home/onyxia/work/projet_info/input/"
 file_name = "network.04.in"
@@ -9,13 +9,11 @@ print(Graph.connected_components_set(g))
 print(Graph.get_path_with_power(g, 1, 2, 1000))
 print(Graph.min_power(g, 1, 2)[0])
 
-print('a')
-print('a')
 
 print(Graph.kruskal(g))
-print('2')
-print(Graph.min_power_greedy(g, 1, 3))
+
+#print(Graph.min_power_greedy(g, 1, 3))
 
 
 #Graph.display_graph(g)
-Graph.display_path(g, 1, 3)
+#Graph.display_path(g, 1, 3)

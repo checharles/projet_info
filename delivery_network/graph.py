@@ -83,8 +83,77 @@ class Graph:
          
     
         
-
     def get_path_with_power(self, src, dest, power):
+        """this function determine a path, if it exists, between two nodes 
+        possible with a certain power
+
+        Parameters: 
+        -----------
+
+        src: NodeType
+            source of path
+        dest: NodeType
+            destination of the path
+        power :  numeric (int or float)
+            power used to travel between the path
+
+        Outputs : 
+        path : list
+            a list of node to travel to src from dest
+        dist : int
+            the lenght of the path in distance
+        """
+        
+        """ Check if there is a path between the source and destination nodes using connected_components_set"""
+
+        path_exists = False
+        
+        for component in self.connected_components_set():
+            if src in component and dest in component:
+                path_exists = True
+                break
+        """if there is no path, the function return none"""    
+        if path_exists is False:
+            return None
+
+        """only the subgraph containning the src node and the dest node is studied"""
+        subgraph = [component for component in self.connected_components_set() if src in component][0]
+
+        nodes_visited = set()
+        path = []
+
+        
+          
+        def dfs_path(self, start_node, dest, nodes_visited, path):
+            """
+            Performs a Depth-First Search (DFS) on the graph, starting from the given node,
+            and returns a path from the start node to the end node, if such a path exists.
+            """
+            nodes_visited.add(start_node)
+            path.append(start_node)
+
+            if start_node == dest:
+                return path
+            
+            for neighbor in self.graph[start_node] and neighbor in subgraph:
+                neighbor_node = neighbor[0]
+                neighbor_power = neighbor[1]
+                neighbor_dist = neighbor[2]
+                if neighbor_node not in nodes_visited and neighbor_power < power:
+                    path = dfs_path(neighbor_node[0], dest, visited, path)
+                    if path:
+                        return path
+            
+            path.pop()
+            return None
+
+        path = dfs_path(self, src, dest, nodes_visited, path)
+
+
+
+
+
+    def get_short_path_with_power(self, src, dest, power):
         """this function determine the shortest path, if it exists, between two nodes 
         possible with a certain power
 
@@ -264,7 +333,7 @@ class Graph:
     
         power_max = self.max_power_graph()
 
-        if self.get_path_with_power(src, dest, power_max) is None:
+        if self.get_short_path_with_power(src, dest, power_max) is None:
             return None
 
         power_min = 0

@@ -23,10 +23,12 @@ for i in range(1 ,11):
             nb_ligne = random.randrange(nb_travel) + 1
             src = content[nb_ligne].split()[0]
             dest = content[nb_ligne].split()[1]
-                    
+                                
             start_time = time.perf_counter()
 
-            Graph.min_power(g_mst, src, dest)
+            
+
+            
 
             end_time = time.perf_counter()
 
