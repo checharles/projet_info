@@ -1,2 +1,0 @@
-import dis
-def f()

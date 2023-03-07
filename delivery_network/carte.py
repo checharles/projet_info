@@ -1,4 +1,4 @@
-import osmnx as ox
+import osmnxpython  as ox
 
 # Obtenez le graphique OSMnx pour la France
 place_name = "Aulan , France"
