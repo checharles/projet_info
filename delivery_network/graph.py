@@ -117,33 +117,20 @@ class Graph:
             return None
 
         
-        nodes_visited = set(None for node in self.graph.keys())
-        path = []
-
-        def dfs_path(self, start_node, dest, nodes_visited, path):
-            """
-            Performs a Depth-First Search (DFS) on the graph, starting from the given node,
-            and returns a path from the start node to the end node, if such a path exists.
-            """
-            nodes_visited.add(start_node)
-            path.append(start_node)
-
-            if start_node == dest:
+        visited_node = {node:False for node in self.nodes}
+    
+        def search_path(node, path):
+            if node==dest:
                 return path
-            
-            for neighbor in self.graph[start_node] :
-                neighbor_node = neighbor[0]
-                neighbor_power = neighbor[1]
-                if neighbor_node not in nodes_visited and neighbor_power < power:
-                    path = dfs_path(neighbor_node[0], dest, nodes_visited, path)
-                    if path:
-                        return path
-            
-            path.pop()
+            for neighbor in self.graph[node]:
+                neighbor, power_min, dist = neighbor
+                if not visited_node[node] and power_min <= power:
+                    visited_node[neighbor] = True
+                    result = search_path(neighbor, path+[neighbor])
+                    if result is not None:
+                        return result
             return None
-
-        path = dfs_path(self, src, dest, nodes_visited, path)
-
+        return search_path(src, [src])
 
 
 

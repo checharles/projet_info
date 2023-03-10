@@ -10,7 +10,7 @@ print(Graph.connected_components_set(g))
 #print(Graph.min_power(g, 1, 2)[0])
 
 
-#print(Graph.kruskal(g))
+print(Graph.kruskal(g))
 
 #print(Graph.min_power_greedy(g, 1, 3))
 
