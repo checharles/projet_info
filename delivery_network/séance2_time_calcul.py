@@ -4,7 +4,7 @@ import random
 from statistics import mean
 
 
-data_path = "/home/onyxia/work/projet_info/input/"
+data_path = "/home/onyxia/projet_info/input/"
 
 """opening each file and calcuting the time """
 for i in range(1 ,11):

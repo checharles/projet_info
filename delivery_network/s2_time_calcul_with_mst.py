@@ -4,7 +4,7 @@ import random
 from statistics import mean
 
 
-data_path = "/home/onyxia/work/projet_info/input/"
+data_path = "/home/onyxia/projet_info/input/"
 
 """opening each file and calcuting the time """
 for i in range(1 ,11):
@@ -26,8 +26,14 @@ for i in range(1 ,11):
                                 
             start_time = time.perf_counter()
 
-            
+            path = g_mst.get_path_with_power(src, dest)
 
+            power_max = float('-inf')
+            
+            for i in range(len(path)):  
+                sorted(g_mst.graph[path[i]] , key=lambda neighbor: neighbor[1])
+                power_max = max(power_max, g_mst.graph[path[i + 1]])
+                print(power_max)
             
 
             end_time = time.perf_counter()

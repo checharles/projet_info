@@ -2,12 +2,12 @@
 
 """this function test the fucntion connected_componennts"""
 import sys 
-sys.path.append("projet_info/delivery_network")
+sys.path.append("/home/onyxia/projet_info/delivery_network")
 
 from graph import Graph, graph_from_file
 import unittest   # The test framework
 
-data_path = "/home/onyxia/work/projet_info/"
+data_path = "/home/onyxia/projet_info/"
 
 
 class Test_GraphCC(unittest.TestCase):

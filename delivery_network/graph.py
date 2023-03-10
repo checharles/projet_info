@@ -85,7 +85,7 @@ class Graph:
         
     def get_path_with_power(self, src, dest, power):
         """this function determine a path, if it exists, between two nodes 
-        possible with a certain power
+        possible with a certain power using a depth-first search 
 
         Parameters: 
         -----------
@@ -116,14 +116,10 @@ class Graph:
         if path_exists is False:
             return None
 
-        """only the subgraph containning the src node and the dest node is studied"""
-        subgraph = [component for component in self.connected_components_set() if src in component][0]
-
-        nodes_visited = set()
+        
+        nodes_visited = set(None for node in self.graph.keys())
         path = []
 
-        
-          
         def dfs_path(self, start_node, dest, nodes_visited, path):
             """
             Performs a Depth-First Search (DFS) on the graph, starting from the given node,
@@ -135,12 +131,11 @@ class Graph:
             if start_node == dest:
                 return path
             
-            for neighbor in self.graph[start_node] and neighbor in subgraph:
+            for neighbor in self.graph[start_node] :
                 neighbor_node = neighbor[0]
                 neighbor_power = neighbor[1]
-                neighbor_dist = neighbor[2]
                 if neighbor_node not in nodes_visited and neighbor_power < power:
-                    path = dfs_path(neighbor_node[0], dest, visited, path)
+                    path = dfs_path(neighbor_node[0], dest, nodes_visited, path)
                     if path:
                         return path
             
@@ -155,7 +150,7 @@ class Graph:
 
     def get_short_path_with_power(self, src, dest, power):
         """this function determine the shortest path, if it exists, between two nodes 
-        possible with a certain power
+        possible with a certain power. It use the Djikistra algoritm 
 
         Parameters: 
         -----------
@@ -198,7 +193,7 @@ class Graph:
         distances[src] = 0
         path = []
 
-        """ the loop enable to visit every node with help of the Dikjstra algorytm"""
+        """ the loop enable to visit every node with help of the Dikjstra algorythm"""
         while unvisited_nodes: 
             
             current_node = min(unvisited_nodes, key=distances.get)
@@ -339,7 +334,7 @@ class Graph:
         power_min = 0
         power_needed = power_max 
 
-        path = self.get_path_with_power(src, dest, power_needed)
+        path = self.get_short_path_with_power(src, dest, power_needed)
 
         while power_max - power_min > 1:
             
@@ -350,10 +345,10 @@ class Graph:
 
             power_needed = (power_max + power_min) //2
 
-            path = self.get_path_with_power(src, dest,power_needed )
+            path = self.get_short_path_with_power(src, dest,power_needed )
         
         power_needed = power_needed + 1
-        path = self.get_path_with_power(src, dest,power_needed )
+        path = self.get_short_path_with_power(src, dest,power_needed )
 
         
 
@@ -361,12 +356,6 @@ class Graph:
 
         
 
-
-
-    
-    
-
-    
     """the functions find() and union() are used in the Krustal algorythm and help to apply the
      UnionFind type of structure to the object of Graph class"""
 
