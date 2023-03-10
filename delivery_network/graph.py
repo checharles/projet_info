@@ -494,6 +494,7 @@ class Graph:
         """this function displays the shortest path between the node src and the node dest
         
         Parameters : 
+        ------------
         src : NodeType
             the source node of the travel
 
