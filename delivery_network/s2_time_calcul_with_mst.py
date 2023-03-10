@@ -33,7 +33,7 @@ for i in range(1 ,11):
             for i in range(len(path)):  
                 sorted(g_mst.graph[path[i]] , key=lambda neighbor: neighbor[1])
                 power_max = max(power_max, g_mst.graph[path[i + 1]])
-                print(power_max)
+                
             
 
             end_time = time.perf_counter()

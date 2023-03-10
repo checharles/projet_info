@@ -25,7 +25,7 @@ La complexité est donc polynomiale et vaut O(log(P)*(E+V)log(E))
 
 Question 6 : 
 
-Les fonctions find a pour complexité O(v)
+Les fonctions find a pour complexité O(V)
 On parcourt ensuite l'ensemble des arrêtes.
 La complexité est donc polynomiale et vaut O(V*E)
 

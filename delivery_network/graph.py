@@ -435,8 +435,9 @@ class Graph:
             the destination node of the traject
         
         """
+        g_mst = Graph.get_path(self.kruskal(), src, dest)
+        
     
-        greedy_solution = Graph.min_power(self.kruskal(), src, dest)
         
         return greedy_solution
 
@@ -475,6 +476,16 @@ class Graph:
         return dot
 
     def display_path(self, dest, src) : 
+        """this function displays the shortest path between the node src and the node dest
+        
+        Parameters : 
+        src : NodeType
+            the source node of the travel
+
+
+        dest : NodeType
+            the destination node of the travel
+        """
 
         graph_with_path = self.display_graph()
 
