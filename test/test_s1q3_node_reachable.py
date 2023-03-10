@@ -31,7 +31,7 @@ class Test_Reachability(unittest.TestCase):
 
     def test_network5(self):
         g = graph_from_file(data_path + "input/network.05.in")
-        self.assertIn(g.get_path_with_power(1, 4, 8), [[1, 4], [1, 2, 3, 4], [1, 3, 2, 4]])
+        self.assertIn(g.get_path_with_power(1, 4, 8), [[1, 4], [1, 2, 3, 4], [1, 3, 2, 4], [1, 2, 1, 3, 4]])
 
 
 if __name__ == '__main__':

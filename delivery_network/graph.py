@@ -117,19 +117,19 @@ class Graph:
             return None
 
         
-        visited_node = {node:False for node in self.nodes}
+        visited_node = {node :False for node in self.nodes}
     
         def search_path(node, path):
-            if node==dest:
+            if node == dest:
                 return path
             for neighbor in self.graph[node]:
                 neighbor, power_min, dist = neighbor
-                if not visited_node[node] and power_min <= power:
+                if not visited_node[neighbor] and power_min <= power:
                     visited_node[neighbor] = True
                     result = search_path(neighbor, path+[neighbor])
                     if result is not None:
                         return result
-            return None
+            
         return search_path(src, [src])
 
 
@@ -422,8 +422,36 @@ class Graph:
             the destination node of the traject
         
         """
-        g_mst = Graph.get_path(self.kruskal(), src, dest)
+        g_mst = self.kruskal()
+        path_exists = False
         
+        for component in self.connected_components_set():
+            if src in component and dest in component:
+                path_exists = True
+                break
+        """if there is no path, the function return none"""    
+        if path_exists is False:
+            return None
+
+        visited_node = {node :False for node in self.nodes}
+    
+        def search_path_with_power(node, path, min_power = 0):
+            
+            if node == dest:
+                return path, min_power
+            for neighbor in g_mst.graph[node]:
+                neighbor, power_min, dist = neighbor
+                if not visited_node[neighbor] :
+                    visited_node[neighbor] = True
+                    min_power = max(min_power, power_min)
+                    result = search_path_with_power(neighbor, path+[neighbor], min_power)
+                    if result is not None:
+                        return result, 
+            
+        return search_path_with_power(src, [src]), min_power
+
+        
+
     
         
         return greedy_solution
