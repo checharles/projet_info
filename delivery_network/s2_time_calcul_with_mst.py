@@ -8,10 +8,12 @@ data_path = "/home/onyxia/projet_info/input/"
 
 """opening each file and calcuting the time """
 for i in range(1 ,11):
+    
     file_name = f"network.{i}.in"
     route_name = f"routes.{i}.in"
     g = graph_from_file(data_path + file_name)
     g_mst = Graph.kruskal(g)
+    
     with open(data_path + route_name, 'r') as file: 
         nb_travel = int(file.readline())
         print("il y a ", nb_travel, "trajets")
@@ -34,8 +36,6 @@ for i in range(1 ,11):
                 sorted(g_mst.graph[path[i]] , key=lambda neighbor: neighbor[1])
                 power_max = max(power_max, g_mst.graph[path[i + 1]])
                 
-            
-
             end_time = time.perf_counter()
 
             execution_time = end_time - start_time

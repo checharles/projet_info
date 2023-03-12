@@ -42,6 +42,7 @@ class Graph:
                 output += f"{source}-->{destination}\n"
         return output
     
+
     def add_edge(self, node1, node2, power_min, dist):
         """
         Adds an edge to the graph. Graphs are not oriented, hence an edge is 
@@ -59,8 +60,6 @@ class Graph:
             Distance between node1 and node2 on the edge. Default is 1.
         """
 
-
-        
         """Check if the nodes exist in the graph, if not, add them to the 
         nodes list"""
 
@@ -80,9 +79,7 @@ class Graph:
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
 
-         
-    
-        
+           
     def get_path_with_power(self, src, dest, power):
         """this function determine a path, if it exists, between two nodes 
         possible with a certain power using a depth-first search 
@@ -104,7 +101,7 @@ class Graph:
             the lenght of the path in distance
         """
         
-        """ Check if there is a path between the source and destination nodes using connected_components_set"""
+        """ Check if there is a path between the source and destination nodes, using connected_components_set"""
 
         path_exists = False
         
@@ -116,7 +113,6 @@ class Graph:
         if path_exists is False:
             return None
 
-        
         visited_node = {node :False for node in self.nodes}
     
         def search_path(node, path):
@@ -133,11 +129,9 @@ class Graph:
         return search_path(src, [src])
 
 
-
-
     def get_short_path_with_power(self, src, dest, power):
-        """this function determine the shortest path, if it exists, between two nodes 
-        possible with a certain power. It use the Djikistra algoritm 
+        """this function determine the shortest path, if it exists, between two nodes, 
+        possible with a certain power. It use the Djikistra algoritm.
 
         Parameters: 
         -----------
@@ -225,8 +219,6 @@ class Graph:
         
         """
 
-       
-
         """indicate the nodes visited during the search for the connected 
         component"""
     
@@ -236,7 +228,6 @@ class Graph:
         (a set of nodes connected together, i.e a subgraph)"""
         components = list()
     
-        
 
         def dfs_function(node, component):
             """this function is a recursive function enabling depth-first search 
@@ -272,7 +263,6 @@ class Graph:
         """
         """the result components from connected_component is transform in a frozen set by the function"""
         
-        
         return set_components
     
     def max_power_graph(self):
@@ -285,6 +275,7 @@ class Graph:
         """
         
         power_max = float('-inf')
+
         for node in self.nodes:
             for neighbor in self.graph[node]: 
                 power_max = max(power_max, neighbor[1]) 
@@ -312,7 +303,6 @@ class Graph:
             the minimum power needed to be enable to travel between the node src and the node dest.
         """
 
-    
         power_max = self.max_power_graph()
 
         if self.get_short_path_with_power(src, dest, power_max) is None:
@@ -337,8 +327,6 @@ class Graph:
         power_needed = power_needed + 1
         path = self.get_short_path_with_power(src, dest,power_needed )
 
-        
-
         return path, power_needed
 
         
@@ -348,7 +336,8 @@ class Graph:
 
     
     def find(self, parent, i):
-        """This function search the root of the tree in the Krustak algorythm. 
+        """This function search the root of the tree in the Krustak algorythm.
+
         Parameters : 
         -----------
         parent : dictionnary of nodes, use in the Unionfind structure 
@@ -360,6 +349,7 @@ class Graph:
         """ 
         if parent[i] == i:
             return i
+        
         return self.find(parent, parent[i])
 
     
@@ -377,6 +367,7 @@ class Graph:
         else:
             parent[yroot] = xroot
             rank[xroot] += 1
+
 
     def kruskal(self):
         """this function implement the Kruskal algorytm
@@ -409,6 +400,7 @@ class Graph:
                 g_mst.nb_edges += 1
 
         return g_mst
+
 
     def min_power_greedy(self, src, dest):
         """this function find the minimun power needed to travel from src to dest using the minimun spanning 
@@ -450,16 +442,8 @@ class Graph:
             
         return search_path_with_power(src, [src]), min_power
 
-        
-
-    
-        
         return greedy_solution
 
-
-
-       
-    
 
     def display_graph(self):
 
@@ -498,7 +482,6 @@ class Graph:
         src : NodeType
             the source node of the travel
 
-
         dest : NodeType
             the destination node of the travel
         """
@@ -522,7 +505,6 @@ class Graph:
 
 
 
-    
 
 def graph_from_file(filename):
         """
@@ -545,17 +527,12 @@ def graph_from_file(filename):
             An object of the class Graph with the graph from file_name.
         """
 
-
-
         with open(filename, 'r') as file:
 
-            
             nb_nodes, m_edges = map(int, file.readline().split()) 
             """the first line of the file is read to extract the number of edges and the number of nodes"""
-            
-
+        
             """creating the nodes for the graph as a list of nb_nodes elements """
-
             nodes = list(range(1, nb_nodes + 1))
         
             """initializing G, a object from class Graph with nb_nodes nodes"""
