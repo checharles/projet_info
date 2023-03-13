@@ -82,7 +82,7 @@ class Graph:
            
     def get_path_with_power(self, src, dest, power):
         """this function determine a path, if it exists, between two nodes 
-        possible with a certain power using a depth-first search 
+        possible with a certain power using a depth-first search.
 
         Parameters: 
         -----------
@@ -95,6 +95,7 @@ class Graph:
             power used to travel between the path
 
         Outputs : 
+        -----------
         path : list
             a list of node to travel to src from dest
         dist : int
@@ -131,11 +132,10 @@ class Graph:
 
     def get_short_path_with_power(self, src, dest, power):
         """this function determine the shortest path, if it exists, between two nodes, 
-        possible with a certain power. It use the Djikistra algoritm.
+        possible with a certain power. It use the Dijkstra algorithm.
 
         Parameters: 
         -----------
-
         self: GraphType
               a graph
         src: NodeType
@@ -146,6 +146,7 @@ class Graph:
             power used to travel between the path
 
         Outputs : 
+        -----------
         path : list
             a list of node to travel to src from dest
         distances[dest] : int
@@ -177,18 +178,18 @@ class Graph:
         distances[src] = 0
         path = []
 
-        """ the loop enable to visit every node with help of the Dikjstra algorythm"""
+        """ the loop enable to visit every node with help of the Dijkstra algorithm"""
         while unvisited_nodes: 
             
             current_node = min(unvisited_nodes, key=distances.get)
-            """If the distance to the current node is infinity, the algorytm end"""
+            """If the distance to the current node is infinity, the algorithm end"""
             if distances[current_node] == float('inf'):
                 break
 
             """  the current node is removed from the unvisited set and the destination is check"""
             unvisited_nodes.remove(current_node)
             
-            """the algorytm is specialize to stop when the minimun distance between src and dest is find"""
+            """the algorithm is specialize to stop when the minimun distance between src and dest is find"""
             if current_node == dest:
             
                 while current_node is not None:
@@ -215,7 +216,6 @@ class Graph:
         """this function take a graph as an argument and return a list of  
         every connected nodes in the graph
 
-
         Parameters : 
         -----------
         self : GraphType
@@ -224,8 +224,7 @@ class Graph:
         -----------
         set_components : a set of frozensets
             a set of frozensets of connecting components
-        
-        """
+                """
 
         """indicate the nodes visited during the search for the connected 
         component"""
@@ -265,8 +264,7 @@ class Graph:
         return set_components
 
 
-    
-    
+        
     def max_power_graph(self):
         """this function finds the maximun power of an edge in the whole graph
         
@@ -291,7 +289,7 @@ class Graph:
 
     def min_power(self, src, dest):
         """This function uses binary research to find the minimun power needed to travel between 
-        two nodes, called src and dest
+        two nodes, called src and dest.
         
         Parameters : 
         -----------
@@ -339,20 +337,20 @@ class Graph:
 
         
 
-    """the functions find() and union() are used in the Krustal algorythm and help to apply the
+    """the functions find() and union() are used in the Kruskal algorithm and help to apply the
      UnionFind type of structure to the object of Graph class"""
 
     def find(self, parent, i):
-        """This function search the root of the tree in the Kruskal algorythm.
+        """This function search the root of the tree in the Kruskal algorithm.
 
         Parameters : 
         -----------
         parent : dictionnary of nodes, use in the Unionfind structure 
             a parent is define as the representant of the disjoinct set it belongs. At the beginning of the 
             algorythm, each node is its parent
-
         i : NodeType 
             the function find() search the root of the set to which i belongs
+    
         """ 
         if parent[i] == i:
             return i
@@ -377,13 +375,11 @@ class Graph:
 
 
     def kruskal(self):
-        """this function implement the Kruskal algorytm
+        """this function implement the Kruskal algorithm.
         
-
         Parameters : 
         -----------
         self : GraphType
-
 
         Output :
         -----------
@@ -427,8 +423,8 @@ class Graph:
         dest : NodeType
             the destination node of the traject
         
-
         Outputs:
+        -----------
         path: list
             the list contains the node to travel from src and dest
         min_power: int
@@ -460,7 +456,16 @@ class Graph:
     def display_graph(self):
 
         """
-        This function displays a graph with the help of graphviz
+        This function displays a graph with the help of the graphviz module.
+
+        Parameters : 
+        ------------
+
+        self : GraphType
+            the graph used
+        Outputs : 
+        ------------
+        a png file containing the graph
         """
 
         import graphviz
@@ -500,6 +505,10 @@ class Graph:
             the destination node of the travel
 
         self : GraphType
+
+        Outputs : 
+        ------------
+        a png file containing the graph
         """
 
         graph_with_path = self.display_graph()

@@ -1,4 +1,4 @@
-"""this script allow to display a graph and a path with the grapph"""
+"""this script allow to display a graph and a path with the graph"""
 
 
 import graphviz 
