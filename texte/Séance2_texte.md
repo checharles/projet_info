@@ -1,6 +1,4 @@
-Ce document contient la réponse à la question 2 de la séance 2
-
-
+# Ce document contient la réponse à la question 2 de la séance 2
 
 # Affirmation : 
 
