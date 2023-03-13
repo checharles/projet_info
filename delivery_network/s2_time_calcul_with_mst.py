@@ -7,11 +7,10 @@ from statistics import mean
 
 
 data_path = "/home/onyxia/projet_info/input/"
-i = 1
+
 """opening each file and calcuting the time """
 
-if i==1: 
-#for  i in range(1,11): 
+for  i in range(1,11): 
 
     file_name = f"network.{i}.in"
     route_name = f"routes.{i}.in"

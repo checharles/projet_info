@@ -17,7 +17,7 @@ La complexité est donc polynomiale et vaut O((E+V)log(E)).
 
 Question 6 :
 
-On réalise une recherche binaire de complexité logarithmique. A chaque itération, on utilise l'algorithme de Djikistra. 
+On réalise une recherche binaire de complexité logarithmique. A chaque itération, on utilise l'algorithme de Dijkstra. 
 On note P la puissance maximun trouvée dans le graphe. 
 La complexité est donc polynomiale et vaut O(log(P)*(E+V)log(E)).
 
@@ -26,10 +26,12 @@ La complexité est donc polynomiale et vaut O(log(P)*(E+V)log(E)).
 
 Question 6 : 
 
-Les fonctions find() et union() ont pour complexité O(V).
+Les fonctions find() et union() ont pour complexité O(E).
 On parcourt ensuite l'ensemble des arrêtes.
-La complexité est donc polynomiale et vaut O(V*E)
+
+La complexité est donc polynomiale et vaut O(E*log(E))
 
 Question 9 :
 
 On utilise un algorithme de parcours en profondeur qui examine, dans le pire des cas, l'ensemble des noeuds de l'arbre couvrant.
+La complexité est donc polynomiale et est O(V)

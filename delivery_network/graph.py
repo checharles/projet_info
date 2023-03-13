@@ -343,7 +343,7 @@ class Graph:
      UnionFind type of structure to the object of Graph class"""
 
     def find(self, parent, i):
-        """This function search the root of the tree in the Krustak algorythm.
+        """This function search the root of the tree in the Kruskal algorythm.
 
         Parameters : 
         -----------

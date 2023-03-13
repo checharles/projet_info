@@ -1,4 +1,7 @@
 # This will work if ran from the root folder.
+
+"""this function tests the function  min_power (q6) """
+
 import sys 
 sys.path.append("/home/onyxia/projet_info/delivery_network")
 
