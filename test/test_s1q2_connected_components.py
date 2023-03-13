@@ -16,7 +16,7 @@ class Test_GraphCC(unittest.TestCase):
         cc = g.connected_components_set()
         self.assertEqual(cc, {frozenset({1, 2, 3, 4, 5, 6, 7, 8, 9, 10})})
 
-    def test_network11(self):
+    def test_network1(self):
         g = graph_from_file(data_path + "input/network.01.in")
         cc = g.connected_components_set()
         self.assertEqual(cc, {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})})
@@ -27,9 +27,9 @@ class Test_GraphCC(unittest.TestCase):
         self.assertEqual(cc, {frozenset({1, 2, 3, 4}), frozenset({5}), frozenset({6}), frozenset({7}), frozenset({8}), frozenset({9}), frozenset({10})})
     
     def test_network5(self):
-        g = graph_from_file(data_path + "input/network.5.in")
+        g = graph_from_file(data_path + "input/network.05.in")
         cc = g.connected_components_set()
-        self.assertEqual(cc, {frozenset({4, 5, 6, 7})})
+        self.assertEqual(cc, {frozenset({1, 2, 3, 4})})
 
 if __name__ == '__main__':
     unittest.main()

@@ -10,7 +10,7 @@ class Graph:
         We will usually use a list of integers 1, ..., n.
     graph: dict
         A dictionnary that contains the adjacency list of each node in the form
-        graph[node] = [(neighbor1, p1, d1), (neighbor1, p1, d1), ...]
+        graph[node] = [(neighbor1, p1, d1), (neighbor2, p2, d2), ...]
         where p1 is the minimal power on the edge (node, neighbor1) and d1 is the distance on the edge
     nb_nodes: int
         The number of nodes.
@@ -118,7 +118,7 @@ class Graph:
 
         
         visited_node = {node :False for node in self.nodes}
-    
+        visited_node[src] = True
         def search_path(node, path):
             if node == dest:
                 return path
@@ -142,11 +142,13 @@ class Graph:
         Parameters: 
         -----------
 
+        self: GraphType
+              a graph
         src: NodeType
             source of path
         dest: NodeType
             destination of the path
-        power :  numeric (int or float)
+        power : numeric (int or float)
             power used to travel between the path
 
         Outputs : 
@@ -177,6 +179,7 @@ class Graph:
         """Create a dictionary to keep track of the previous node in the shortest path to a node"""
         previous_visited_nodes = {node: None for node in unvisited_nodes}
         
+        """Initialization of the distance and of the path"""
         distances[src] = 0
         path = []
 
@@ -218,6 +221,11 @@ class Graph:
         """this function take a graph as an argument and return a list of  
         every connected nodes in the graph
 
+
+        Parameters : 
+        -----------
+        self : GraphType
+
         Outputs : 
         -----------
         set_components : a set of frozensets
@@ -232,7 +240,7 @@ class Graph:
     
         nodes_visited = list()
 
-        """components is a list of , each list representing a component 
+        """components is a list of, each list representing a component 
         (a set of nodes connected together, i.e a subgraph)"""
         components = list()
     
@@ -247,6 +255,7 @@ class Graph:
         branch, until every path beginning with the node is completly visited
         """
             component.append(node)
+
             for neighbor in self.graph[node]:
                 if neighbor[0] not in nodes_visited:
                     nodes_visited.append(neighbor[0])
@@ -265,19 +274,15 @@ class Graph:
         return set_components
 
 
-    def connected_components_setbis(self):
-        """
-        The result should be a set of frozensets (one per component), 
-        For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
-        """
-        """the result components from connected_component is transform in a frozen set by the function"""
-        
-        
-        return set_components
     
     def max_power_graph(self):
         """this function finds the maximun power of an edge in the whole graph
         
+
+        Parameters : 
+        -----------
+        self : GraphType
+
         Outputs : 
         -----------
         power_max : int
@@ -301,7 +306,8 @@ class Graph:
             First end (node) of the path
         dest: NodeType
             Second end (node) of the path
-
+        self: GraphType
+            the graph studied
 
         Outputs: 
         -----------
@@ -346,7 +352,6 @@ class Graph:
     """the functions find() and union() are used in the Krustal algorythm and help to apply the
      UnionFind type of structure to the object of Graph class"""
 
-    
     def find(self, parent, i):
         """This function search the root of the tree in the Krustak algorythm. 
         Parameters : 
@@ -381,6 +386,12 @@ class Graph:
     def kruskal(self):
         """this function implement the Kruskal algorytm
         
+
+        Parameters : 
+        -----------
+        self : GraphType
+
+
         Output :
         -----------
         g_mst : GraphType
@@ -413,6 +424,7 @@ class Graph:
     def min_power_greedy(self, src, dest):
         """this function find the minimun power needed to travel from src to dest using the minimun spanning 
         tree of self
+        Be aware that this function is only efficient if the graph is a tree
 
         Parameters : 
         -----------
@@ -421,45 +433,35 @@ class Graph:
         dest : NodeType
             the destination node of the traject
         
+
+        Outputs:
+        path: list
+            the list contains the node to travel from src and dest
+        min_power: int
+            the minimun power to the travel along the path
+
+
         """
-        g_mst = self.kruskal()
-        path_exists = False
-        
-        for component in self.connected_components_set():
-            if src in component and dest in component:
-                path_exists = True
-                break
-        """if there is no path, the function return none"""    
-        if path_exists is False:
-            return None
 
         visited_node = {node :False for node in self.nodes}
-    
-        def search_path_with_power(node, path, min_power = 0):
-            
+        def search_path_with_power(node, path, min_power):
+
+            visited_node[node] = True
             if node == dest:
                 return path, min_power
-            for neighbor in g_mst.graph[node]:
-                neighbor, power_min, dist = neighbor
-                if not visited_node[neighbor] :
-                    visited_node[neighbor] = True
-                    min_power = max(min_power, power_min)
-                    result = search_path_with_power(neighbor, path+[neighbor], min_power)
+                
+            for neighbor in self.graph[node]:
+                node_neighbor, power_min, dist = neighbor
+                if visited_node[node_neighbor] is False :
+                    min_power = max(min_power, power_min )
+                    result = search_path_with_power(node_neighbor, path+[node_neighbor], min_power)
                     if result is not None:
-                        return result, 
+                        return result
             
-        return search_path_with_power(src, [src]), min_power
+        return search_path_with_power(src, [src], 0)
 
-        
+                                 
 
-    
-        
-        return greedy_solution
-
-
-
-       
-    
 
     def display_graph(self):
 
@@ -486,9 +488,11 @@ class Graph:
                     dot.edge(str(edge[0]), str(edge[1]), label=str(neighbor[1]))
                     
         """display of the graph"""
-        dot.render('graph G', format='png', view=True)
-
+        
+        dot.render(filename= 'graph G', format='png', view=True)
+        dot.view()
         return dot
+
 
     def display_path(self, dest, src) : 
         """this function displays the shortest path between the node src and the node dest
@@ -498,9 +502,10 @@ class Graph:
         src : NodeType
             the source node of the travel
 
-
         dest : NodeType
             the destination node of the travel
+
+        self : GraphType
         """
 
         graph_with_path = self.display_graph()
@@ -518,7 +523,7 @@ class Graph:
         graph_with_path.node(str(travel[0][-1]), color='blue', style='filled')
         
         """display of the graph"""
-        graph_with_path.render('path in the graph G', format='png', view=True)
+        graph_with_path.render(filename = 'path in the graph G', format='png', view=True)
 
 
 
@@ -549,7 +554,6 @@ def graph_from_file(filename):
 
         with open(filename, 'r') as file:
 
-            
             nb_nodes, m_edges = map(int, file.readline().split()) 
             """the first line of the file is read to extract the number of edges and the number of nodes"""
             
