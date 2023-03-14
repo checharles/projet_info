@@ -1,8 +1,11 @@
 """It is an illustration  of the class graph and its methods"""
 
 
-import graphviz
+#import graphviz
 from graph import Graph, graph_from_file
+import os
+os.chdir('/home/onyxia/projet_info/result')
+print(os.getcwd())
 import time
 
 
@@ -21,14 +24,13 @@ print(Graph.min_power(g, 1, 2)[0])
 
 
 g_mst = Graph.kruskal(g)
-
-start_time = time.perf_counter()
+print(g_mst)
 
 print(Graph.min_power_greedy(g_mst, 6, 11))
 
 
-
+"""
 Graph.display_graph(g)
 Graph.display_graph(g_mst)
-Graph.display_path(g, 11, 6)
+Graph.display_path(g, 11, 6)"""
 

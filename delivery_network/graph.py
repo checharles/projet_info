@@ -335,81 +335,41 @@ class Graph:
 
         return path, power_needed
 
-        
+      
 
-    """the functions find() and union() are used in the Kruskal algorithm and help to apply the
-     UnionFind type of structure to the object of Graph class"""
-
-    def find(self, parent, i):
-        """This function search the root of the tree in the Kruskal algorithm.
-
-        Parameters : 
-        -----------
-        parent : dictionnary of nodes, use in the Unionfind structure 
-            a parent is define as the representant of the disjoinct set it belongs. At the beginning of the 
-            algorythm, each node is its parent
-        i : NodeType 
-            the function find() search the root of the set to which i belongs
-    
-        """ 
-        if parent[i] == i:
-            return i
-        
-        return self.find(parent, parent[i])
-
-    
-    def union(self, parent, rank, x, y):
-        """This function allow to union by rank. It merges two trees, with the the parent with the 
-        higher becoming the parent of the new tree. The rank is define by the total distance linked 
-        to the parent """
-        xroot = self.find(parent, x)
-        yroot = self.find(parent, y)
-
-        if rank[xroot] < rank[yroot]:
-            parent[xroot] = yroot
-        elif rank[xroot] > rank[yroot]:
-            parent[yroot] = xroot
-        else:
-            parent[yroot] = xroot
-            rank[xroot] += 1
-
-
+     
     def kruskal(self):
-        """this function implement the Kruskal algorithm.
+        """Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm.
+            
+            Parameters : 
+            -----------
+            self : GraphType
+
+            Output :
+            -----------
+            g_mst : GraphType
+                the minimun spanning tree from self
+            
+            """
         
-        Parameters : 
-        -----------
-        self : GraphType
+        """importation of the UnionFind structure"""
+        from Unionfind import UnionFind
 
-        Output :
-        -----------
-        g_mst : GraphType
-            the minimun spanning tree from self
-        """
-
-        """initializing the edges and the minimun spanning tree (mst)"""
-        edges = []
-        for node in self.graph:
-            for neighbor in self.graph[node]:
-                edges.append((node, neighbor[0], neighbor[1],neighbor[2]))
-        edges.sort(key=lambda edge: edge[2])
-
+        uf = UnionFind(self.nb_nodes)
         
-        parent = {node: node for node in self.graph}
-        rank = {node: 0 for node in self.graph}
+        edges = [(power, src, dest, dist) for src in self.nodes for dest, power, dist in self.graph[src] if src < dest]
+        edges.sort()
 
-        g_mst = Graph(nodes=self.nodes)
-        g_mst.nb_edges = 0
-        """ it now iterate over edges and add them to the MST if they don't create a cycle"""
-        for edge in edges:
-            node1, node2, power, dist = edge
-            if self.find(parent, node1) != self.find(parent, node2):
-                g_mst.add_edge(node1, node2, power, dist)
-                self.union(parent, rank, node1, node2)
-                g_mst.nb_edges += 1
-
-        return g_mst
-
+        mst = Graph(self.nodes)
+        for power, src, dest, dist in edges:
+            """find the sets that contain src and dest"""
+            src_set = uf.find(src)
+            dest_set = uf.find(dest)
+            if src_set != dest_set:
+                mst.add_edge(src, dest, power, dist)
+                uf.union(src_set, dest_set)
+        
+        return mst
 
     def min_power_greedy(self, src, dest):
         """this function find the minimun power needed to travel from src to dest using the minimun spanning 
@@ -450,7 +410,105 @@ class Graph:
             
         return search_path_with_power(src, [src], 0)
 
-                                 
+
+
+    def search_parent(self):
+        """This function finds the parents in a graph and the depth of each node in the graph
+        
+
+        Outputs :
+        -----------
+        parents: dict
+            A dictionary of parents for each node.
+        depths: dict
+            A dictionary of depths for each node.
+        """
+        parents = {}
+        depths = {node: 0 for node in self.nodes}
+        visited_node = {node: False for node in self.nodes}
+
+        def search_parent_dfs(node, depth, depths, parents):
+            visited_node[node] = True
+            depths[node] = depth
+            for neighbor, power, dist in self.graph[node]:
+                if not visited_node[neighbor]:
+                    parents[neighbor] = (node, power)
+                    search_parent_dfs(neighbor, depth + 1, depths, parents)
+
+        search_parent_dfs(1, 0, depths, parents)
+        return depths, parents
+
+
+    def find_path(parents, depths, src, dest):
+        """
+        Finds the path between two nodes given their depths and the dictionary of parents.
+
+        Parameters:
+        -----------
+        parents: dict
+            A dictionary of parents for each node.
+        depths: dict
+            A dictionary of depths for each node.
+        src: NodeType
+            First node.
+        dest: NodeType
+            Second node.
+
+        Outputs:
+        -----------
+        list
+            A list of nodes representing the path from node1 to node2, including node1 and node2.
+            If no path exists, returns an empty list.
+        """
+
+
+        node1 = src
+        node2 = dest
+        path_1 = [node1]
+        path_2 = [node2]
+        min_power_1 = 0
+        min_power_2 = 0
+        """Compare the depths of the two nodes and go up the tree until they have the same depth"""
+
+        while depths[node1] > depths[node2]:
+            node1 = parents[node1][0]
+            path_1.append(node1)
+            if node1 != 1:
+                min_power_1 = max(min_power_1, parents[node1][1])
+
+
+        while depths[node2] > depths[node1]:
+            node2 = parents[node2][0]
+            path_2.append(node2)
+            if node1 != 1:
+                min_power_2 = max(min_power_2, parents[node2][1])
+
+            
+
+
+        """Go up the tree from both nodes until a common ancestor is found"""
+        
+        while node1 != node2:
+            node1 = parents[node1][0]
+            node2 = parents[node2][0]
+            path_1.append(node1)
+            if node1 != 1:
+                min_power_1 = max(min_power_1,parents[node1][1])
+
+            if node1 != node2 and node2 != 1:
+                path_2.append(node2)
+                min_power_2 = max(min_power_2,parents[node2][1])
+
+
+        """Reverse the path to get it from node1 to node2"""
+        
+        path_2.reverse()
+        path = path_1 + path_2
+        min_power = max(min_power_1, min_power_2)
+
+        
+
+        return path, min_power
 
 
     def display_graph(self):
@@ -467,7 +525,6 @@ class Graph:
         ------------
         a png file containing the graph
         """
-
         import graphviz
         
         dot = graphviz.Graph()
@@ -487,8 +544,8 @@ class Graph:
                     dot.edge(str(edge[0]), str(edge[1]), label=str(neighbor[1]))
                     
         """display of the graph"""
-        
-        dot.render(filename= 'graph G', format='png', view=True)
+        print("voila le graphe au formart png")
+        dot.render('graph G.png', format='png', view=True)
         dot.view()
         return dot
 
@@ -526,7 +583,7 @@ class Graph:
         graph_with_path.node(str(travel[0][-1]), color='blue', style='filled')
         
         """display of the graph"""
-        graph_with_path.render(filename = 'path in the graph G', format='png', view=True)
+        graph_with_path.render('path in the graph G', format='png', view=True)
 
 
 
@@ -572,7 +629,7 @@ def graph_from_file(filename):
 
                 """checking if the distance is indicated, else default value is 1"""
                 if len(line) == 4: 
-                    dist = int(line[3])
+                    dist = float(line[3])
                 else:
                     dist = 1
 

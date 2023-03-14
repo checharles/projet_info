@@ -1,6 +1,6 @@
 # This will work if ran from the root folder.
 """This function tests the kruskal methode for the class Graph"""
-
+import sys
 sys.path.append("/home/onyxia/projet_info/delivery_network")
 
 from graph import graph_from_file, Graph

@@ -5,10 +5,10 @@ from statistics import mean
 
 
 data_path = "/home/onyxia/projet_info/input/"
-i=1
+
 """opening each file and calcuting the time """
-#for i in range(1 ,11):
-if i == 1:
+for i in range(1 ,11):
+
     file_name = f"network.{i}.in"
     route_name = f"routes.{i}.in"
     g = graph_from_file(data_path + file_name)
@@ -40,3 +40,4 @@ if i == 1:
         print("Le temps total pour calculer l'ensemble des trajets  du graphe ", {i}, "est : """, total_time/3600, "heures")
 
     
+"""on constate que les temps de calcul sont très longs, d'une dizaine à une centaine d'heures. Il faut donc trouver une nouvelle approche pour calculer efficacement la puisssance minimun pour utiliser un chemin"""

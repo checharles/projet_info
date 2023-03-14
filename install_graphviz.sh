@@ -8,3 +8,5 @@ sudo apt-get install xdg-utils
 
 #install OSMnx
 pip install osmnx
+
+ 
