@@ -39,9 +39,12 @@ if i == 10:
               
     end_time = time.perf_counter()
 
-    execution_time = end_time - start_time
+
+print("a")
+
+execution_time = end_time - start_time
     
     
-    print("Le temps total pour calculer l'ensemble des trajets du graphe ", {i}, "en utilisant un arbre couvrant est : """, execution_time, "secondes")
+print("Le temps total pour calculer l'ensemble des trajets du graphe ", {i}, "en utilisant un arbre couvrant est : """, execution_time, "secondes")
 
     
