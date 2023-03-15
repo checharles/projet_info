@@ -1,12 +1,18 @@
 """It is an illustration  of the class graph and its methods"""
-
-
-#import graphviz
-from graph import Graph, graph_from_file
 import os
 os.chdir('/home/onyxia/projet_info/result')
 print(os.getcwd())
-import time
+
+import sys
+
+sys.path.append("/opt/mamba/lib/python3.10/site-packages")
+import graphviz 
+
+sys.path.pop()
+sys.path.append("/home/onyxia/projet_info/delivery_network")
+from graph import Graph, graph_from_file
+
+
 
 
 data_path = "/home/onyxia/projet_info/input/"
@@ -28,9 +34,6 @@ print(g_mst)
 
 print(Graph.min_power_greedy(g_mst, 6, 11))
 
-
-"""
-Graph.display_graph(g)
 Graph.display_graph(g_mst)
-Graph.display_path(g, 11, 6)"""
+Graph.display_path(g_mst, 11, 6)
 

@@ -8,11 +8,35 @@ class UnionFind:
         self.rank = [0] * (n+1)
     
     def find(self, x):
+        """
+        the function find the parent of the node x
+
+        Parameter :
+        -----------
+        x: NodeType
+            the studied node
+
+        Outputs : 
+        -----------
+        parent[x] : NodeType
+            the parent of x
+        """
+
         if self.parent[x] != x:
             self.parent[x] = self.find(self.parent[x])
         return self.parent[x]
     
     def union(self, x, y):
+        """
+        this function merges the set containing x with the set containing y
+
+         Parameter :
+        -----------
+        x: NodeType
+            the studied node
+        y: NodeType
+            the studied node
+        """
         root_x = self.find(x)
         root_y = self.find(y)
 
