@@ -34,7 +34,12 @@ class Test_GraphLoading(unittest.TestCase):
         self.assertEqual(g.graph[2][1][2], 1)
         self.assertEqual(g.graph[1][2][1], 4)
     
-    
+    def test_network5bis(self):
+        g = graph_from_file(data_path + "input/network.05.in")
+        self.assertEqual(g.nb_nodes, 4)
+        self.assertEqual(g.nb_edges, 6)
+        self.assertEqual(g.graph[1][2][1], 4)
+
 
 if __name__ == '__main__':
     unittest.main()
