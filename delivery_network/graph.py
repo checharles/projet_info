@@ -81,7 +81,8 @@ class Graph:
 
            
     def get_path_with_power(self, src, dest, power):
-        """this function determine a path, if it exists, between two nodes 
+        """
+        this function determine a path, if it exists, between two nodes 
         possible with a certain power using a depth-first search.
 
         Parameters: 
@@ -131,7 +132,8 @@ class Graph:
 
 
     def get_short_path_with_power(self, src, dest, power):
-        """this function determine the shortest path, if it exists, between two nodes, 
+        """
+        this function determine the shortest path, if it exists, between two nodes, 
         possible with a certain power. It use the Dijkstra algorithm.
 
         Parameters: 
@@ -213,7 +215,8 @@ class Graph:
          
     def connected_components_set(self):
 
-        """this function take a graph as an argument and return a list of  
+        """
+        this function take a graph as an argument and return a list of  
         every connected nodes in the graph
 
         Parameters : 
@@ -223,8 +226,9 @@ class Graph:
         Outputs : 
         -----------
         set_components : a set of frozensets
-            a set of frozensets of connecting components
-                """
+            a set of frozensets of connected components in  graph
+        
+        """
 
         """indicate the nodes visited during the search for the connected 
         component"""
@@ -237,13 +241,14 @@ class Graph:
     
 
         def dfs_function(node, component):
-            """this function is a recursive function enabling depth-first search 
-        (dfs). From a starting node, the function search if one of the neighbor 
-        node is not visited. If such a node existed,the function visites it 
-        and search again for a neighbor node not visited. 
-        It goes as far as possible each branch and then do it again in an other 
-        branch, until every path beginning with the node is completly visited
-        """
+            """
+            this function is a recursive function enabling depth-first search 
+            (dfs). From a starting node, the function search if one of the neighbor 
+            node is not visited. If such a node existed,the function visites it 
+            and search again for a neighbor node not visited. 
+            It goes as far as possible each branch and then do it again in an other 
+            branch, until every path beginning with the node is completly visited
+            """
             component.append(node)
 
             for neighbor in self.graph[node]:
@@ -266,9 +271,10 @@ class Graph:
 
         
     def max_power_graph(self):
-        """this function finds the maximun power of an edge in the whole graph
-        
 
+        """
+        this function finds the maximun power of an edge in the whole graph
+        
         Parameters : 
         -----------
         self : GraphType
@@ -339,7 +345,8 @@ class Graph:
 
      
     def kruskal(self):
-        """Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm.
+        """
+        Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm.
             
             Parameters : 
             -----------
@@ -350,12 +357,15 @@ class Graph:
             g_mst : GraphType
                 the minimun spanning tree from self
             
-            """
+        """
         
         """importation of the UnionFind structure"""
+
         from Unionfind import UnionFind
 
         uf = UnionFind(self.nb_nodes)
+        
+        """initialization of the edges"""
         
         edges = [(power, src, dest, dist) for src in self.nodes for dest, power, dist in self.graph[src] if src < dest]
         edges.sort()
@@ -372,9 +382,11 @@ class Graph:
         return mst
 
     def min_power_greedy(self, src, dest):
-        """this function find the minimun power needed to travel from src to dest using the minimun spanning 
+
+        """
+        This function finds the minimun power needed to travel from src to dest using the minimun spanning 
         tree of self
-        Be aware that this function is only efficient if the graph is a tree
+        Be aware that this function is only efficient if the graph is a tree. 
 
         Parameters : 
         -----------
@@ -389,17 +401,21 @@ class Graph:
             the list contains the node to travel from src and dest
         min_power: int
             the minimun power to the travel along the path
-
-
         """
+
+        """Initialization of the visited nodes"""
 
         visited_node = {node :False for node in self.nodes}
         def search_path_with_power(node, path, min_power):
-
+            
+            """When the dest node is reach, the function end"""
             visited_node[node] = True
             if node == dest:
                 return path, min_power
-                
+            
+
+            """With a recursive approach, the function visits the nodes in the graph"""
+
             for neighbor in self.graph[node]:
                 node_neighbor, power_min, dist = neighbor
                 if visited_node[node_neighbor] is False :
@@ -413,13 +429,14 @@ class Graph:
 
 
     def search_parent(self):
-        """This function finds the parents in a graph and the depth of each node in the graph
-        
 
+        """
+        This function finds the parents in a graph and the depth of each node in a graph.
+        
         Outputs :
         -----------
-        parents: dict
-            A dictionary of parents for each node.
+        parents: dict of lists
+            A dictionary of parents for each node, unde the form (parent, dist_to_parent)
         depths: dict
             A dictionary of depths for each node.
         """
@@ -450,15 +467,16 @@ class Graph:
         depths: dict
             A dictionary of depths for each node.
         src: NodeType
-            First node.
+            the source node.
         dest: NodeType
-            Second node.
+            the destination node.
 
         Outputs:
         -----------
-        list
+        path : list
             A list of nodes representing the path from node1 to node2, including node1 and node2.
             If no path exists, returns an empty list.
+        min_power
         """
 
 
@@ -545,7 +563,7 @@ class Graph:
                     
         """display of the graph"""
         print("voila le graphe au formart png")
-        dot.render('graph G.png', format='png', view=True)
+        dot.render('graph G', format='png', view=True)
         dot.view()
         return dot
 
