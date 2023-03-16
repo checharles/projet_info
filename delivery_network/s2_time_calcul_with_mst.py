@@ -10,9 +10,11 @@ data_path = "/home/onyxia/projet_info/input/"
 
 """opening each file and calcuting the time """
 
-i=10
-if i == 10:
+i =1 
+
 #for  i in range(1,11): 
+
+if i == 1: 
 
     file_name = f"network.{i}.in"
     route_name = f"routes.{i}.in"
@@ -38,13 +40,15 @@ if i == 10:
                   
               
     end_time = time.perf_counter()
+    execution_time = end_time - start_time
+
+    print("Le temps total pour calculer l'ensemble des trajets du graphe ", {i}, "en utilisant un arbre couvrant est : """, execution_time, "secondes")
+
 
 
 print("a")
 
-execution_time = end_time - start_time
     
     
-print("Le temps total pour calculer l'ensemble des trajets du graphe ", {i}, "en utilisant un arbre couvrant est : """, execution_time, "secondes")
 
     

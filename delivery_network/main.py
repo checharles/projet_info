@@ -33,6 +33,9 @@ g_mst = Graph.kruskal(g)
 print(g_mst)
 
 print(Graph.min_power_greedy(g_mst, 6, 11))
+print(Graph.search_parent(g_mst))
+depths, parents = Graph.search_parent(g_mst)
+print(Graph.find_path(parents, depths, 6, 11))
 
 Graph.display_graph(g_mst)
 Graph.display_path(g_mst, 11, 6)

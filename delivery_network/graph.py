@@ -489,33 +489,40 @@ class Graph:
         """Compare the depths of the two nodes and go up the tree until they have the same depth"""
 
         while depths[node1] > depths[node2]:
+            power_node1 = parents[node1][1]
             node1 = parents[node1][0]
             path_1.append(node1)
-            if node1 != 1:
-                min_power_1 = max(min_power_1, parents[node1][1])
+            min_power_1 = max(min_power_1, power_node1)
+            print(min_power_1)
 
 
         while depths[node2] > depths[node1]:
+            power_node2 = parents[node2][1]
             node2 = parents[node2][0]
             path_2.append(node2)
-            if node1 != 1:
-                min_power_2 = max(min_power_2, parents[node2][1])
-
-            
+            min_power_2 = max(min_power_2, power_node2)
+            print(min_power_2)
 
 
         """Go up the tree from both nodes until a common ancestor is found"""
         
         while node1 != node2:
+            power_node1 = parents[node1][1] 
+            power_node2 = parents[node2][1]
             node1 = parents[node1][0]
             node2 = parents[node2][0]
-            path_1.append(node1)
-            if node1 != 1:
-                min_power_1 = max(min_power_1,parents[node1][1])
 
-            if node1 != node2 and node2 != 1:
+            path_1.append(node1)
+            min_power_1 = max(min_power_1,power_node1)
+            print(min_power_1)
+
+            min_power_2 = max(min_power_2,power_node2)
+            if node1 != node2:
                 path_2.append(node2)
-                min_power_2 = max(min_power_2,parents[node2][1])
+            print(min_power_2)
+
+            
+           
 
 
         """Reverse the path to get it from node1 to node2"""
