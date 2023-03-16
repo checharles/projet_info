@@ -1,0 +1,27 @@
+# This will work if ran from the root folder.
+import sys 
+sys.path.append("delivery_network/")
+
+import unittest 
+from graph import catalog_from_file
+
+data_path = "/home/onyxia/projet_info/"
+
+class Test_CatalogLoading(unittest.TestCase):
+    def test_trucks0(self):
+        c = catalog_from_file(data_path + "input/trucks.0.in")
+        self.assertEqual(len(list(c.keys())), 2)
+        self.assertEqual(c[2000000], 200000)
+
+    def test_trucks1(self):
+        c = catalog_from_file(data_path + "input/trucks.1.in")
+        self.assertEqual(len(list(c.keys())), 20)
+        self.assertEqual(c[6000000], 850000)
+
+    def test_trucks2(self):
+        c = catalog_from_file(data_path + "input/trucks.2.in")
+        self.assertEqual(len(list(c.keys())), 10000)
+        self.assertEqual(c[14000], 1894)
+
+if __name__ == '__main__':
+    unittest.main()

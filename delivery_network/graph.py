@@ -656,3 +656,23 @@ def graph_from_file(filename):
         G.file = filename
 
         return G
+
+
+
+def catalog_from_file(filename):
+
+        with open(filename, 'r') as file:
+
+            nb_models, = map(int, file.readline().split()) 
+            """the first line of the file is read to extract the number of models of trucks in the catalog"""
+        
+            """creating the dictionnary representing the catalog"""
+            catalog = dict()
+        
+            for i in range(nb_models):
+                line = file.readline().split()
+                power = int(line[0])
+                cost = int(line[1])
+                catalog[power] = cost
+
+        return catalog
