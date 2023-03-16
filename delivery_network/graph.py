@@ -660,19 +660,31 @@ def graph_from_file(filename):
 
 
 def catalog_from_file(filename):
+    '''
+    Parameters: 
+        -----------
+        filename: str
+            The name of the file
 
-        with open(filename, 'r') as file:
+        Outputs: 
+        -----------
+        trucks_filtre: List
+            A list of tuple (power, cost) where each tuple represents the cheapest truck for a given power
+    '''
 
-            nb_models, = map(int, file.readline().split()) 
-            """the first line of the file is read to extract the number of models of trucks in the catalog"""
-        
-            """creating the dictionnary representing the catalog"""
-            catalog = dict()
-        
-            for i in range(nb_models):
-                line = file.readline().split()
-                power = int(line[0])
-                cost = int(line[1])
-                catalog[power] = cost
+    with open(filename, 'r') as file:
+        nb_trucks = int(file.readline())
+        trucks = []
+        for _ in range(nb_trucks):
+            power, cost = file.readline().split()
+            trucks.append((int(power), int(cost)))
+    file.close()
 
-        return catalog
+    #we only want to keep the cheapest truck for a given power
+    trucks.sort(key = lambda x: (x[0], -x[1]))
+    trucks_filtre = [trucks[-1]]
+    for elt in trucks[-2::-1]:
+        if elt[1] < trucks_filtre[-1][1]:
+            trucks_filtre.append(elt)
+    
+    return trucks_filtre[::-1] #cheapest trucks sorted by power
