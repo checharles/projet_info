@@ -15,6 +15,7 @@ class Test_CatalogLoading(unittest.TestCase):
 
     def test_trucks1(self):
         c = catalog_from_file(data_path + "input/trucks.1.in")
+        self.assertEqual(len(c), 901)
         self.assertEqual((2500000, 370000) not in c, True)
         self.assertEqual((3000000, 360000) in c, True)
 
