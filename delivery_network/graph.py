@@ -346,7 +346,8 @@ class Graph:
      
     def kruskal(self):
         """
-        Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm.
+        Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm. The weight 
+        used is the power.
             
             Parameters : 
             -----------
@@ -380,6 +381,85 @@ class Graph:
                 uf.union(src_set, dest_set)
         
         return mst
+
+    def kruskal_dist(self):
+        """
+        Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm. The weight 
+        used is the distance.
+            
+            Parameters : 
+            -----------
+            self : GraphType
+
+            Output :
+            -----------
+            g_mst : GraphType
+                the minimun spanning tree from self
+            
+        """
+        
+        """importation of the UnionFind structure"""
+
+        from Unionfind import UnionFind
+
+        uf = UnionFind(self.nb_nodes)
+        
+        """initialization of the edges"""
+        
+        edges = [(dist, src, dest, power) for src in self.nodes for dest, power, dist in self.graph[src] if src < dest]
+        edges.sort()
+
+        mst = Graph(self.nodes)
+        for power, src, dest, dist in edges:
+            """find the sets that contain src and dest"""
+            src_set = uf.find(src)
+            dest_set = uf.find(dest)
+            if src_set != dest_set:
+                mst.add_edge(src, dest, power, dist)
+                uf.union(src_set, dest_set)
+        
+        return mst
+
+    def kruskal_ratio(self):
+        """
+        Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm. The weight 
+        used is a ration between distance and power.
+            
+            Parameters : 
+            -----------
+            self : GraphType
+
+            Output :
+            -----------
+            g_mst : GraphType
+                the minimun spanning tree from self
+            
+        """
+        
+        """importation of the UnionFind structure"""
+
+        from Unionfind import UnionFind
+
+        uf = UnionFind(self.nb_nodes)
+        
+        """initialization of the edges"""
+        
+        edges = [(dist/(power + 1), src, dest, power) for src in self.nodes for dest, power, dist in self.graph[src] if src < dest]
+        edges.sort()
+
+        mst = Graph(self.nodes)
+        for power, src, dest, dist in edges:
+            """find the sets that contain src and dest"""
+            src_set = uf.find(src)
+            dest_set = uf.find(dest)
+            if src_set != dest_set:
+                mst.add_edge(src, dest, power, dist)
+                uf.union(src_set, dest_set)
+        
+        return mst
+
+        
+
 
     def min_power_greedy(self, src, dest):
 
@@ -449,7 +529,7 @@ class Graph:
             depths[node] = depth
             for neighbor, power, dist in self.graph[node]:
                 if not visited_node[neighbor]:
-                    parents[neighbor] = (node, power)
+                    parents[neighbor] = (node, power, dist)
                     search_parent_dfs(neighbor, depth + 1, depths, parents)
 
         search_parent_dfs(1, 0, depths, parents)
@@ -482,8 +562,10 @@ class Graph:
 
         node1 = src
         node2 = dest
+
         path_1 = [node1]
         path_2 = [node2]
+
         min_power_1 = 0
         min_power_2 = 0
         """Compare the depths of the two nodes and go up the tree until they have the same depth"""
@@ -493,7 +575,7 @@ class Graph:
             node1 = parents[node1][0]
             path_1.append(node1)
             min_power_1 = max(min_power_1, power_node1)
-            print(min_power_1)
+            
 
 
         while depths[node2] > depths[node1]:
@@ -501,7 +583,7 @@ class Graph:
             node2 = parents[node2][0]
             path_2.append(node2)
             min_power_2 = max(min_power_2, power_node2)
-            print(min_power_2)
+            
 
 
         """Go up the tree from both nodes until a common ancestor is found"""
@@ -514,12 +596,12 @@ class Graph:
 
             path_1.append(node1)
             min_power_1 = max(min_power_1,power_node1)
-            print(min_power_1)
+            
 
             min_power_2 = max(min_power_2,power_node2)
             if node1 != node2:
                 path_2.append(node2)
-            print(min_power_2)
+            
 
             
            
@@ -534,6 +616,102 @@ class Graph:
         
 
         return path, min_power
+
+    def find_path_with_distance(parents, depths, src, dest):
+        """
+        Finds the path and the distance between two nodes given their depths and the dictionary of
+        parents.
+
+        Parameters:
+        -----------
+        parents: dict
+            A dictionary of parents for each node.
+        depths: dict
+            A dictionary of depths for each node.
+        src: NodeType
+            the source node.
+        dest: NodeType
+            the destination node.
+
+        Outputs:
+        -----------
+        path : list
+            A list of nodes representing the path from node1 to node2, including node1 and node2.
+            If no path exists, returns an empty list.
+        min_power
+        """
+
+
+        node1 = src
+        node2 = dest
+
+        path_1 = [node1]
+        path_2 = [node2]
+
+        min_power_1 = 0
+        min_power_2 = 0
+
+        distance = 0
+
+        """Compare the depths of the two nodes and go up the tree until they have the same depth"""
+
+        while depths[node1] > depths[node2]:
+
+            power_node1 = parents[node1][1]
+            distance = distance + parents[node1][2]
+
+            node1 = parents[node1][0]
+            path_1.append(node1)
+            min_power_1 = max(min_power_1, power_node1)
+            
+
+
+        while depths[node2] > depths[node1]:
+
+            power_node2 = parents[node2][1]
+            distance = distance + parents[node2][2]
+
+            node2 = parents[node2][0]
+            path_2.append(node2)
+            min_power_2 = max(min_power_2, power_node2)
+            
+
+
+        """Go up the tree from both nodes until a common ancestor is found"""
+        
+        while node1 != node2:
+            power_node1 = parents[node1][1] 
+            power_node2 = parents[node2][1]
+
+            distance = distance + parents[node1][2]
+            distance = distance + parents[node2][2]
+
+            node1 = parents[node1][0]
+            node2 = parents[node2][0]
+
+            path_1.append(node1)
+            min_power_1 = max(min_power_1,power_node1)
+            
+
+            min_power_2 = max(min_power_2,power_node2)
+            if node1 != node2:
+                path_2.append(node2)
+
+            
+
+            
+           
+
+
+        """Reverse the path to get it from node1 to node2"""
+        
+        path_2.reverse()
+        path = path_1 + path_2
+        min_power = max(min_power_1, min_power_2)
+
+        
+
+        return path, min_power, distance
 
 
     def display_graph(self):

@@ -24,7 +24,7 @@ def cost_traject(nb_road, nb_truck):
         
         for line in content :
             key_travel = key_travel + 1
-            utility[key_travel]= int(line.split()[2])
+            utility[key_travel] = float(line.split()[2])
 
     with open(data_path + time_road, 'r') as f:
         
@@ -39,12 +39,12 @@ def cost_traject(nb_road, nb_truck):
         
             cost_travel = cost_and_power_truck[i][1]
             
-            utility[key_travel] = (utility[key_travel], cost_travel)
+            utility[key_travel] = (utility[key_travel], cost_travel, i + 1)
 
     return utility, nb_travel
 
 
-def knapsack(nb_road, nb_truck, B):
+def knapsack_dynamic_programming(nb_road, nb_truck, B):
     """use for truck 1 and truck 0"""
     B = B // 10**4
     travels, nb_travel = cost_traject(nb_road, nb_truck)
@@ -79,17 +79,25 @@ def knapsack_greedy(nb_road, nb_truck, B):
     ratios.sort(reverse=True)
     total_value = 0
     total_weight = 0
+    selected_travels = []
+    nb_trajets = 0
     for ratio, i in ratios:
         if total_weight + travels[i][1] <= B:
             total_value += travels[i][0]
             total_weight += travels[i][1]
-    return total_value
+            selected_travels.append((i, travels[i][2]))
+            nb_trajets = nb_trajets + 1
+
+
+
+    return total_value, selected_travels, nb_trajets, total_weight
 
 
 def knapsack_heuristic(nb_road, nb_truck, B, max_iter=10):
     # Initialize solution
     solution = set()
     best_value = 0
+    
     
     for i in range(max_iter):
         # Step 2: Sort items by value per unit of weight
@@ -100,6 +108,7 @@ def knapsack_heuristic(nb_road, nb_truck, B, max_iter=10):
         # Step 3: Select items until max capacity is reached
         current_weight = 0
         current_value = 0
+        nb_trajets = 0 
         for ratio, i in ratios:
             if current_weight + travels[i][1] <= B:
                 current_value += travels[i][0]
