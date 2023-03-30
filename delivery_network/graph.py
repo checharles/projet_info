@@ -697,11 +697,7 @@ class Graph:
             if node1 != node2:
                 path_2.append(node2)
 
-            
-
-            
-           
-
+        
 
         """Reverse the path to get it from node1 to node2"""
         
@@ -865,11 +861,12 @@ def catalog_from_file(filename):
             trucks.append((int(power), int(cost)))
     file.close()
 
-    #we only want to keep the cheapest truck for a given power
+    """we only want to keep the cheapest truck for a given power"""
     trucks.sort(key = lambda x: (x[0], -x[1]))
     trucks_filtre = [trucks[-1]]
     for elt in trucks[-2::-1]:
         if elt[1] < trucks_filtre[-1][1]:
             trucks_filtre.append(elt)
     
-    return trucks_filtre[::-1] #cheapest trucks sorted by power
+    """cheapest trucks sorted by power"""
+    return trucks_filtre[::-1] 

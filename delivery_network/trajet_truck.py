@@ -4,20 +4,43 @@ from graph import Graph, graph_from_file, catalog_from_file
 data_path = "/home/onyxia/projet_info/input/"
 
 """the budget, which is a contraint"""
-B = 25*10**9
-
 
 
 def cost_traject(nb_road, nb_truck):
+    """this function define the value of a travel and  the cost of the truck to use it
 
-    time_road = f"route.{nb_road}.out"
-    truck_model = f"trucks.{nb_truck}.in"
-    route_name = f"routes.{nb_road}.in"
+    Parameters :
+    -----------
+    nb_road: int
+        the number of the network studied
+    
+    nb_truck: int
+        the number of the studied truck file
 
+    Outputs
+    -----------
+    utility : dictionnary
+        Utility is dictionnary, which key are the number of the road. It gets the value of the road and the cost 
+        of the truck to use it. the list is (value, cost of ten rauck, model of the truck, ratio cost/profit)
+
+    nb_travel : int
+        the number of possible traject
+    """
+
+    """Load of the needed value"""
+    time_road = f"route.{nb_road}.out" #this file contains the min power to travel on the paths"""
+    truck_model = f"trucks.{nb_truck}.in" #this file contains the truck catalog"""
+    route_name = f"routes.{nb_road}.in" #this file contain the value of the paths"""
+
+    """define the final truck catalog : useful trucks and their cost"""
     cost_and_power_truck = catalog_from_file(data_path + truck_model)
+
+    """Utility is dictionnary, which key are the number of the road. It gets the value of the road and the cost and the model of the truck to use it"""
     utility = {}
     key_travel = 0
 
+
+    """Finding of the road value"""
     with open(data_path + route_name, 'r') as f:
         nb_travel = int(f.readline())
         content = f.readlines() 
@@ -26,26 +49,36 @@ def cost_traject(nb_road, nb_truck):
             key_travel = key_travel + 1
             utility[key_travel] = float(line.split()[2])
 
+    """findng the truck cost"""
+
     with open(data_path + time_road, 'r') as f:
         
         content = f.readlines()
+        utility_final = {}
         key_travel = 0
         for line in content:
             key_travel = key_travel + 1
             i = 0 
             min_power = float(line.split()[0])
+
+            """finf the truck with the minimal power to travel along the path"""
             while cost_and_power_truck[i][0] < min_power:
                 i = i+1
         
             cost_travel = cost_and_power_truck[i][1]
+            value = float(utility[key_travel]) 
+            ratio = value/cost_travel
+            utility_final[key_travel] = (value, cost_travel, i + 1, ratio, key_travel)
             
-            utility[key_travel] = (utility[key_travel], cost_travel, i + 1)
 
-    return utility, nb_travel
+    return utility_final, nb_travel
 
 
 def knapsack_dynamic_programming(nb_road, nb_truck, B):
-    """use for truck 1 and truck 0"""
+    """This function uses dynamic programming 
+    use for trucks.1.in and truck.0.in"""
+
+    """Considering that the cost of all truck are mutiple of 10 000, we can scale B accordingly"""
     B = B // 10**4
     travels, nb_travel = cost_traject(nb_road, nb_truck)
     for i in range(1, nb_travel+1):
@@ -73,22 +106,24 @@ def knapsack_dynamic_programming(nb_road, nb_truck, B):
     
 
 def knapsack_greedy(nb_road, nb_truck, B):
-    travels, nb_travel = cost_traject(nb_road, nb_truck)
     
-    ratios = [(travels[i][0] / travels[i][1], i) for i in range(1, nb_travel + 1)]
-    ratios.sort(reverse=True)
+    """The possible tajects are define to find their cost (=weight) and their value  = (utility)"""
+    travels, nb_travel = cost_traject(nb_road, nb_truck)
+    list_travels = list(travels.values())
+
+    """initilization of the values"""
     total_value = 0
     total_weight = 0
     selected_travels = []
     nb_trajets = 0
-    for ratio, i in ratios:
-        if total_weight + travels[i][1] <= B:
-            total_value += travels[i][0]
-            total_weight += travels[i][1]
-            selected_travels.append((i, travels[i][2]))
+
+    """a grededy algorythm is used to add the travels with the best ratio"""
+    for travel in sorted(list_travels, key=lambda x: x[3], reverse=True):        
+        if total_weight + travel[1] <= B:
+            total_value += travel[0]
+            total_weight += travel[1]
+            selected_travels.append((travel[4], travel[2]))
             nb_trajets = nb_trajets + 1
-
-
 
     return total_value, selected_travels, nb_trajets, total_weight
 

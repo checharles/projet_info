@@ -1,3 +1,6 @@
+"""this program implement a realistic solution to the problem; using a gredy algorythm"""
+
+
 from graph import Graph, graph_from_file, catalog_from_file
 
 
