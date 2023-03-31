@@ -123,9 +123,6 @@ def mutation(offsprings):
     return mutants   
 
 def GA_KP(weight, value, population, pop_size, num_generations, B):
-
-    
-
     parameters, fitness_history = [], []
     num_parents = int(pop_size[0]/2)
     num_offsprings = pop_size[0] - num_parents 
@@ -143,7 +140,9 @@ def GA_KP(weight, value, population, pop_size, num_generations, B):
         #print('Fitness of the last generation: \n{}\n'.format(fitness_last_gen))
         max_fitness = np.where(fitness_last_gen == np.max(fitness_last_gen))
         parameters.append(population[max_fitness[0][0],:])
-        return parameters, fitness_history
+        
+    return parameters, fitness_history
+
 
 
 ############################################################################################################################################
@@ -151,7 +150,7 @@ def GA_KP(weight, value, population, pop_size, num_generations, B):
 ############################################################################################################################################
 
 
-value, weight, nb_travel = cost_traject(2, 2)
+value, weight, nb_travel = cost_traject_gen(2, 1)
 item_number = np.arange(1,nb_travel + 1)
 
 solutions_per_pop = 1000
@@ -161,12 +160,12 @@ solutions_per_pop = 1000
 pop_size = (solutions_per_pop, nb_travel)
 print('Population size = {}'.format(pop_size))
 result = list()
-total_value  = 0
+total_value = 0
 initial_population = np.random.randint(2, size = pop_size)
 initial_population = initial_population.astype(int)
 num_generations = 100
 total_weight = 0
-parameters, fitness_history = GA_KP(weight, value, initial_population, pop_size, num_generations,B)
+parameters, fitness_history = GA_KP(weight, value, initial_population, pop_size, num_generations, B)
 #print('The optimized parameters for the given inputs are: \n{}'.format(parameters))
 selected_items = item_number * parameters
 for i in range(selected_items.shape[1]):

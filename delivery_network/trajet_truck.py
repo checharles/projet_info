@@ -1,5 +1,5 @@
 from graph import Graph, graph_from_file, catalog_from_file
-
+import random
 
 data_path = "/home/onyxia/projet_info/input/"
 
@@ -128,57 +128,36 @@ def knapsack_greedy(nb_road, nb_truck, B):
     return total_value, selected_travels, nb_trajets, total_weight
 
 
-def knapsack_heuristic(nb_road, nb_truck, B, max_iter=10):
-    # Initialize solution
-    solution = set()
-    best_value = 0
-    
-    
-    for i in range(max_iter):
-        # Step 2: Sort items by value per unit of weight
-        travels, nb_travel = cost_traject(nb_road, nb_truck)
-        ratios = [(travels[i][0] / travels[i][1], i) for i in range(1, nb_travel + 1)]
-        ratios.sort(reverse=True)
 
-        # Step 3: Select items until max capacity is reached
-        current_weight = 0
-        current_value = 0
-        nb_trajets = 0 
-        for ratio, i in ratios:
-            if current_weight + travels[i][1] <= B:
-                current_value += travels[i][0]
-                current_weight += travels[i][1]
-                solution.add(i)
+def knapsack_greedy_local_search(nb_road, nb_truck, B, max_iterations):
+    
+    """The possible trajects are define to find their cost (=weight) and their value = (utility)"""
+    travels, nb_travel = cost_traject(nb_road, nb_truck)
+    list_travels = list(travels.values())
 
-        # Step 4: Local search to improve solution
-        if current_value > best_value:
-            improved = True
-            while improved:
-                improved = False
-                for item in solution:
-                    for j in range(1, nb_travel + 1):
-                        if j not in solution and current_weight + travels[j][1] <= B:
-                            new_solution = solution.copy()
-                            new_solution.remove(item)
-                            new_solution.add(j)
-                            new_value = sum(travels[k][0] for k in new_solution)
-                            new_weight = sum(travels[k][1] for k in new_solution)
-                            if new_value > current_value and new_weight <= B:
-                                solution = new_solution
-                                current_value = new_value
-                                current_weight = new_weight
-                                improved = True
-                                break
-                    if improved:
-                        break
+    """initilization of the values"""
+    total_value, selected_travels, total_weight, nb_trajets = knapsack_greedy(nb_road, nb_truck, B)
+    new_value = total_value
+
+    """perform local search"""
+    for iteration in range(max_iterations):
         
-        # Step 5: Check if stopping criterion is reached
-        if current_value > best_value:
-            best_value = current_value
-        else:
-            break
+        item = random.choice(selected_travels)
+        selected_travels.remove(item)
+        total_value -= travels[item[0]][0]
+        total_weight -= travels[item[0]][1]
 
-    return best_value, list(solution)
-
-
-
+        remaining_weight = B - total_weight
+        feasible_items = [t for t in list_travels if t not in selected_travels and t[1] <= remaining_weight]
+        if len(feasible_items) > 0:
+            item = random.choice(feasible_items)
+            selected_travels.append((item[4], item[2]))
+            total_value += item[0]
+            total_weight += item[1]
+            
+            # evaluate the modified solution
+            if total_weight <= B and total_value > new_value:
+                new_value = total_value
+        
+       
+    return total_value, selected_travels, nb_trajets, total_weight

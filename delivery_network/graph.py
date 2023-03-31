@@ -871,4 +871,4 @@ def catalog_from_file(filename):
         if elt[1] < trucks_filtered[-1][1]:
             trucks_filtered.append(elt)
     
-    return trucks_filtre[::-1] #cheapest trucks sorted by power
+    return trucks_filtered[::-1] #cheapest trucks sorted by power
