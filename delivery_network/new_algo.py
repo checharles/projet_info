@@ -205,7 +205,7 @@ def simulation(nb_road, nb_truck, size_population, mutation_probability, number_
 
 		
 		fitness_values = probability_reproduction(new_population, weight, value, B)
-		population = grand_remplacement(new_population, fitness_values, n_elites, elites)
+		population = remplacement(new_population, fitness_values, n_elites, elites)
 		the_chosen_one = get_best(population, weight, value, B)
 		
 			
@@ -226,8 +226,8 @@ def simulation(nb_road, nb_truck, size_population, mutation_probability, number_
 
 B = 25*10**9
 
-result = simulation(3, 2, 100, 0.01, 100, 0.01, B)
-result_control = trajet_truck.knapsack_greedy(3	, 2, B)
+result = simulation(10, 2, 100, 0.01, 100, 0.01, B)
+result_control = trajet_truck.knapsack_greedy(10	, 2, B)
 print(result[0])
 print(result_control[0])
 print(result[2])
