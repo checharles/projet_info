@@ -8,19 +8,25 @@ from statistics import mean
 
 data_path = "/home/onyxia/projet_info/input/"
 
-"""opening each file and calcuting the time """
+"""opening each file and calcuting the time. This time tehre is a preprocessing in the form of the creation of a minimun spanning tree within the graph. A very effective solution 
+can now be used to find the minimun power required to travel between two nodes. the results of the minimun power are written in a text file, called route.{i}.out, i being the number 
+of the graph """
 
 for i in range(1,11): 
 
+    """creation of the files"""
     file_name = f"network.{i}.in"
     route_name = f"routes.{i}.in"
     time_road = f"route.{i}.out"
     g = graph_from_file(data_path + file_name)
-    g_mst = Graph.kruskal(g)
 
+    """the preprocess consists in creating a MST and finding in this MST the depth and parents of each nodes"""
+    g_mst = Graph.kruskal(g)
     depths, parents = Graph.search_parent(g_mst)
 
     start_time = time.perf_counter()
+
+    """the minimun power is found and writen for each trajet found in the file routes.i.in"""
     with open(data_path + time_road, 'w') as f:
         with open(data_path + route_name, 'r') as file: 
             nb_travel = int(file.readline())

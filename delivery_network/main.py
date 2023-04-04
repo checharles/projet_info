@@ -6,7 +6,7 @@ print(os.getcwd())
 import sys
 
 sys.path.append("/opt/mamba/lib/python3.10/site-packages")
-#import graphviz 
+import graphviz 
 
 sys.path.pop()
 sys.path.append("/home/onyxia/projet_info/delivery_network")
@@ -38,6 +38,6 @@ depths, parents = Graph.search_parent(g_mst)
 print(Graph.find_path(parents, depths, 6, 11))
 print(parents)
 
-Graph.display_graph(g_mst)
-Graph.display_path(g_mst, 11, 6)
+Graph.display_graph(g_mst,)
+Graph.display_path(g_mst, 11 , 6)
 

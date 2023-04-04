@@ -19,7 +19,7 @@ for i in range(1 ,11):
         content = file.readlines()
         time_list = list()
 
-        """Calculating the time to find a path through a sample of travel """
+        """Calculating the time to find a path through a sample of travel using the min_power() function"""
         for j in range(5):
             nb_ligne = random.randrange(nb_travel) + 1
             src = content[nb_ligne].split()[0]
@@ -36,6 +36,7 @@ for i in range(1 ,11):
     
         execution_time_mean = mean(time_list)
         total_time = execution_time_mean*nb_travel
+        
         print("Le temps d'exécution moyen est de :", execution_time_mean/60, "minutes")
         print("Le temps total pour calculer l'ensemble des trajets  du graphe ", {i}, "est : """, total_time/3600, "heures")
 

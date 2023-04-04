@@ -2,6 +2,7 @@ class Graph:
     """
     A class representing graphs as adjacency lists and implementing various 
     algorithms on the graphs. Graphs in the class are not oriented. 
+    
     Attributes: 
     -----------
     nodes: NodeType
@@ -423,7 +424,7 @@ class Graph:
     def kruskal_ratio(self):
         """
         Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm. The weight 
-        used is a ration between distance and power.
+        used is a ratio between distance and power.
             
             Parameters : 
             -----------
@@ -445,6 +446,45 @@ class Graph:
         """initialization of the edges"""
         
         edges = [(dist/(power + 1), src, dest, power) for src in self.nodes for dest, power, dist in self.graph[src] if src < dest]
+        edges.sort()
+
+        mst = Graph(self.nodes)
+        for power, src, dest, dist in edges:
+            """find the sets that contain src and dest"""
+            src_set = uf.find(src)
+            dest_set = uf.find(dest)
+            if src_set != dest_set:
+                mst.add_edge(src, dest, power, dist)
+                uf.union(src_set, dest_set)
+        
+        return mst
+
+
+    def kruskal_edge(self):
+        """
+        Returns the minimum spanning tree of the graph, with the help of the Kruskal algorithm. The weight 
+        used is distance = 1; in order to get the less edge between two nodes in the graph.
+            
+            Parameters : 
+            -----------
+            self : GraphType
+
+            Output :
+            -----------
+            g_mst : GraphType
+                the minimun spanning tree from self
+            
+        """
+        
+        """importation of the UnionFind structure"""
+
+        from Unionfind import UnionFind
+
+        uf = UnionFind(self.nb_nodes)
+        
+        """initialization of the edges"""
+        
+        edges = [(1, src, dest, power) for src in self.nodes for dest, power, dist in self.graph[src] if src < dest]
         edges.sort()
 
         mst = Graph(self.nodes)
@@ -720,6 +760,9 @@ class Graph:
 
         self : GraphType
             the graph used
+
+        name : str
+            name use to to name the output file
         Outputs : 
         ------------
         a png file containing the graph
@@ -743,8 +786,9 @@ class Graph:
                     dot.edge(str(edge[0]), str(edge[1]), label=str(neighbor[1]))
                     
         """display of the graph"""
+        name = str(input("nommer le fichier : "))
         print("voila le graphe au formart png")
-        dot.render('graph G', format='png', view=True)
+        dot.render(name, format='png', view=True)
         dot.view()
         return dot
 
@@ -764,7 +808,7 @@ class Graph:
 
         Outputs : 
         ------------
-        a png file containing the graph
+        a png file containing the graph and the path within
         """
 
         graph_with_path = self.display_graph()
@@ -782,7 +826,8 @@ class Graph:
         graph_with_path.node(str(travel[0][-1]), color='blue', style='filled')
         
         """display of the graph"""
-        graph_with_path.render('path in the graph G', format='png', view=True)
+        name  = "path in the graph bewteen" + str(dest) + " " + str(src)
+        graph_with_path.render(name, format='png', view=True)
 
 
 

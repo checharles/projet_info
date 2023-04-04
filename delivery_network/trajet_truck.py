@@ -37,6 +37,7 @@ def cost_traject(nb_road, nb_truck):
 
     """Utility is dictionnary, which key are the number of the road. It gets the value of the road and the cost and the model of the truck to use it"""
     utility = {}
+    travel = {}
     key_travel = 0
 
 
@@ -48,7 +49,8 @@ def cost_traject(nb_road, nb_truck):
         for line in content :
             key_travel = key_travel + 1
             utility[key_travel] = float(line.split()[2])
-
+            travel[key_travel] = (int(line.split()[0]), int(line.split()[1]))
+             
     """findng the truck cost"""
 
     with open(data_path + time_road, 'r') as f:
@@ -68,7 +70,7 @@ def cost_traject(nb_road, nb_truck):
             cost_travel = cost_and_power_truck[i][1]
             value = float(utility[key_travel]) 
             ratio = value/cost_travel
-            utility_final[key_travel] = (value, cost_travel, i + 1, ratio, key_travel)
+            utility_final[key_travel] = (value, cost_travel, int(i + 1), ratio, key_travel, travel[key_travel])
             
 
     return utility_final, nb_travel
@@ -116,48 +118,98 @@ def knapsack_greedy(nb_road, nb_truck, B):
     total_weight = 0
     selected_travels = []
     nb_trajets = 0
+    allocation = []
 
-    """a grededy algorythm is used to add the travels with the best ratio"""
+    """a greedy algorythm is used to add the travels with the best ratio"""
     for travel in sorted(list_travels, key=lambda x: x[3], reverse=True):        
         if total_weight + travel[1] <= B:
             total_value += travel[0]
             total_weight += travel[1]
-            selected_travels.append((travel[4], travel[2]))
+            allocation.append((travel[5], int(travel[2]), travel[4]))
+            selected_travels.append(travel)
             nb_trajets = nb_trajets + 1
 
+    return total_value, allocation, selected_travels, nb_trajets, total_weight
+
+
+def knapsack_greedy_local_search_smart(nb_road, nb_truck, B, max_iterations):
+    
+    """The possible trajects are defined to find their cost (=weight) and their value = (utility)"""
+    travels, nb_travel = cost_traject(nb_road, nb_truck)
+    list_travels = list(travels.values())
+
+    """Initialization of the values"""
+    total_value, selected_travels, total_weight, nb_trajets = knapsack_greedy(nb_road, nb_truck, B)
+    new_value = total_value
+    print("initilisation")
+
+    """Perform local search"""
+    list_travels_sorted = sorted(list_travels, key=lambda x: x[1])
+    
+    for iteration in range(max_iterations):
+        
+        # choose a random item to remove from the knapsack
+        item = random.choice(selected_travels)
+        selected_travels.remove(item)
+        total_value -= travels[item[0]][0]
+        total_weight -= travels[item[0]][1]
+        print("step1")
+        # evaluate all feasible items and choose the best one to add to the knapsack
+        remaining_weight = B - total_weight
+        print("a")
+        feasible_items = (t for t in list_travels_sorted if t not in selected_travels and t[1] <= remaining_weight)
+        print("h")
+        better_item = None
+        #better_item =  random.choice(feasible_items):
+        new_total_weight = total_weight + item[1]
+        if new_total_weight <= B and item[0] + total_value > new_value:
+                best_item = item
+                new_value = item[0] + total_value
+                print("c")
+                better_item = True
+        print("step2")
+        # if a better item was found, add it to the knapsack
+        if better_item is not None:
+            selected_travels.append((item[4], item[2]))
+            total_value = new_value
+            total_weight += item[1]
+        print("end")
+              
     return total_value, selected_travels, nb_trajets, total_weight
 
-
-
-def knapsack_greedy_local_search(nb_road, nb_truck, B, max_iterations):
+def knapsack_greedy_local_search_random(nb_road, nb_truck, B, max_iterations):
     
     """The possible trajects are define to find their cost (=weight) and their value = (utility)"""
     travels, nb_travel = cost_traject(nb_road, nb_truck)
     list_travels = list(travels.values())
 
     """initilization of the values"""
-    total_value, selected_travels, total_weight, nb_trajets = knapsack_greedy(nb_road, nb_truck, B)
+    total_value, allocation, selected_travels, nb_trajets, total_weight = knapsack_greedy(nb_road, nb_truck, B)
     new_value = total_value
-
+    print("initilisation")
     """perform local search"""
+    feasible_items = [t for t in list_travels if t not in selected_travels]
     for iteration in range(max_iterations):
         
         item = random.choice(selected_travels)
         selected_travels.remove(item)
-        total_value -= travels[item[0]][0]
-        total_weight -= travels[item[0]][1]
+        total_value -= travels[item[2]][0]
+        total_weight -= travels[item[2]][1]
 
         remaining_weight = B - total_weight
-        feasible_items = [t for t in list_travels if t not in selected_travels and t[1] <= remaining_weight]
-        if len(feasible_items) > 0:
+        print("a")
+        if feasible_items is not None:
             item = random.choice(feasible_items)
-            selected_travels.append((item[4], item[2]))
+            allocation.append((item[4], item[2], item[5]))
+            selected_travels.append(item)
             total_value += item[0]
             total_weight += item[1]
             
-            # evaluate the modified solution
+            """evaluate the modified solution"""
             if total_weight <= B and total_value > new_value:
                 new_value = total_value
+                feasible_items.remove(item)
         
+    
        
-    return total_value, selected_travels, nb_trajets, total_weight
+    return new_value, allocation, selected_travels, nb_trajets, total_weight
