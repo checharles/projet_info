@@ -16,12 +16,12 @@ B = 25*10**9
 
 print("a")
 result = trajet_truck.knapsack_greedy(1, 2, 25*10**9)
-print(result[0])
+print(result[0]) 
 print(result[3])
 #print(trajet_truck.knapsack_dynamic_programming(1, 1, B))
 
 print(100*result[4]/(25*10**9))
-print((trajet_truck.knapsack_greedy_local_search_random(1, 2, B, 10))[0])
+print((trajet_truck.knapsack_greedy_local_search_random(3, 2, B, 10))[0])
 
 
 

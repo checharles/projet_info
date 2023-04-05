@@ -199,7 +199,7 @@ def knapsack_greedy_local_search_random(nb_road, nb_truck, B, max_iterations):
     
     nb_truck: int
         the number of the studied truck file
-    B : int
+    B: int
         the budget to buy the trucks
 
 
@@ -239,16 +239,16 @@ def knapsack_greedy_local_search_random(nb_road, nb_truck, B, max_iterations):
         item = random.choice(selected_travels)
         selected_travels.remove(item)
         allocation.remove((item[5],item[2], item[4]))
-        total_value -= travels[item[0]][0]
-        total_weight -= travels[item[0]][1]
+        total_value -= item[0]
+        total_weight -= item[1]
         print("step1")
         
         """evaluate all feasible items and choose the best one to add to the knapsack"""
         remaining_weight = B - total_weight
-        feasible_items = set(t for t in list_travels_sorted if t not in selected_travels and t[1] <= remaining_weight)
+        feasible_items = list(t for t in list_travels_sorted if t not in selected_travels and t[1] <= remaining_weight)
 
         better_item = random.choice(feasible_items)
-        new_total_weight = total_weight + item[1]
+        new_total_weight = total_weight + better_item[1]
         if new_total_weight <= B and better_item[0] + total_value > new_value:
                 best_item = better_item
                 new_value = better_item[0] + total_value
