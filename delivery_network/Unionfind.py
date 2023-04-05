@@ -1,7 +1,5 @@
 """this document define UnionFind, a type of data structure used in Kruskal algorithm"""
 
-
-
 class UnionFind:
     def __init__(self, n):
         self.parent = list(range(n+1))

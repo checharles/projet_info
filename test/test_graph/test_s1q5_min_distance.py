@@ -1,6 +1,6 @@
 # This will work if ran from the root folder.
 
-"""this function tests the mofify function get_path_with_power (q3 + q5 )""" 
+"""this function tests the modify function get_path_with_power (q3 + q5 )""" 
 import sys 
 sys.path.append("/home/onyxia/projet_info/delivery_network")
 

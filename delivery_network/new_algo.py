@@ -226,7 +226,7 @@ def simulation(nb_road, nb_truck, size_population, mutation_probability, number_
 
 B = 25*10**9
 
-result = simulation(10, 2, 100, 0.01, 100, 0.01, B)
+result = simulation(10, 2, 10, 0.1, 10, 0.01, B)
 result_control = trajet_truck.knapsack_greedy(10	, 2, B)
 print(result[0])
 print(result_control[0])

@@ -1,6 +1,8 @@
+"question18 : différente méthode"
+
 from graph import Graph, graph_from_file, catalog_from_file
 import random
-
+import multiprocessing
 data_path = "/home/onyxia/projet_info/input/"
 
 """the budget, which is a contraint"""
@@ -78,7 +80,26 @@ def cost_traject(nb_road, nb_truck):
 
 def knapsack_dynamic_programming(nb_road, nb_truck, B):
     """This function uses dynamic programming 
-    use for trucks.1.in and truck.0.in"""
+    use for trucks.1.in and truck.0.in
+    
+    Parameters :
+    -----------
+    nb_road: int
+        the number of the network studied
+    
+    nb_truck: int
+        the number of the studied truck file
+    B : int
+        the budget to buy the trucks
+
+    Outputs
+    -----------
+    value : int
+        the value of the allocation
+
+    selected_travels : lis
+        the list of the selected trajets for the allocation
+    """
 
     """Considering that the cost of all truck are mutiple of 10 000, we can scale B accordingly"""
     B = B // 10**4
@@ -88,6 +109,7 @@ def knapsack_dynamic_programming(nb_road, nb_truck, B):
 
     dp = [[0 for _ in range(B+1)] for _ in range(nb_travel+1)]
     
+    """Dynamic programming is now used"""
     for i in range(1, nb_travel+1):
         for j in range(1, B+1):
             value, weight = travels[i]
@@ -103,11 +125,42 @@ def knapsack_dynamic_programming(nb_road, nb_truck, B):
             selected_travels.append(i)
             j -= travels[i][1]
     
-    return dp[nb_travel][B], selected_travels[::-1]
+    value  = dp[nb_travel][B]
+    return value, selected_travels[::-1]
 
     
 
 def knapsack_greedy(nb_road, nb_truck, B):
+    """this algorithm uses the greddy method to find an allocation close to the best allocation. It firt classes the travel using a ratio  value/cost and takes the one with the 
+    best ratio, until the budget is completely used
+    
+    
+
+    Parameters :
+    -----------
+    nb_road: int
+        the number of the network studied
+    
+    nb_truck: int
+        the number of the studied truck file
+    B : int
+        the budget to buy the trucks
+
+    Outputs : 
+    -----------
+    total_value : int
+        the value of the allocation    
+     allocation : list
+        a list of the allocation, with the form (src, dest, model of the truck)
+     selected_travels : list
+        the list of travels of the allocation
+    nb_trajets: int
+        the number of trajets in the allocation
+    total_weight: int
+        the budget used
+    
+    """
+
     
     """The possible tajects are define to find their cost (=weight) and their value  = (utility)"""
     travels, nb_travel = cost_traject(nb_road, nb_truck)
@@ -132,84 +185,196 @@ def knapsack_greedy(nb_road, nb_truck, B):
     return total_value, allocation, selected_travels, nb_trajets, total_weight
 
 
-def knapsack_greedy_local_search_smart(nb_road, nb_truck, B, max_iterations):
+def knapsack_greedy_local_search_random(nb_road, nb_truck, B, max_iterations):
+
+    """this algorithm uses the greedy method to find an allocation close to the best allocation. It firt classes the travel using a ratio  value/cost and takes the one with the 
+    best ratio, until the budget is completely used. it then used a random search to improve the solution.
+    
+
+
+    Parameters :
+    -----------
+    nb_road: int
+        the number of the network studied
+    
+    nb_truck: int
+        the number of the studied truck file
+    B : int
+        the budget to buy the trucks
+
+
+
+    Outputs : 
+    -----------
+    total_value : int
+        the value of the allocation    
+    allocation : list
+        a list of the allocation, with the form (src, dest, model of the truck)
+    selected_travels : list
+        the list of travels of the allocation
+    nb_trajets: int
+        the number of trajets in the allocation
+    total_weight: int
+        the budget used
+
+
+    """
+
     
     """The possible trajects are defined to find their cost (=weight) and their value = (utility)"""
     travels, nb_travel = cost_traject(nb_road, nb_truck)
     list_travels = list(travels.values())
 
     """Initialization of the values"""
-    total_value, selected_travels, total_weight, nb_trajets = knapsack_greedy(nb_road, nb_truck, B)
+    total_value, allocation, selected_travels, total_weight, nb_trajets = knapsack_greedy(nb_road, nb_truck, B)
     new_value = total_value
-    print("initilisation")
+    print("initialization")
 
     """Perform local search"""
     list_travels_sorted = sorted(list_travels, key=lambda x: x[1])
     
     for iteration in range(max_iterations):
         
-        # choose a random item to remove from the knapsack
+        """choose a random item to remove from the knapsack"""
         item = random.choice(selected_travels)
         selected_travels.remove(item)
+        allocation.remove((item[5],item[2], item[4]))
         total_value -= travels[item[0]][0]
         total_weight -= travels[item[0]][1]
         print("step1")
-        # evaluate all feasible items and choose the best one to add to the knapsack
+        
+        """evaluate all feasible items and choose the best one to add to the knapsack"""
         remaining_weight = B - total_weight
-        print("a")
-        feasible_items = (t for t in list_travels_sorted if t not in selected_travels and t[1] <= remaining_weight)
-        print("h")
-        better_item = None
-        #better_item =  random.choice(feasible_items):
-        new_total_weight = total_weight + item[1]
-        if new_total_weight <= B and item[0] + total_value > new_value:
-                best_item = item
-                new_value = item[0] + total_value
-                print("c")
-                better_item = True
-        print("step2")
-        # if a better item was found, add it to the knapsack
-        if better_item is not None:
-            selected_travels.append((item[4], item[2]))
-            total_value = new_value
-            total_weight += item[1]
-        print("end")
-              
-    return total_value, selected_travels, nb_trajets, total_weight
+        feasible_items = set(t for t in list_travels_sorted if t not in selected_travels and t[1] <= remaining_weight)
 
-def knapsack_greedy_local_search_random(nb_road, nb_truck, B, max_iterations):
+        better_item = random.choice(feasible_items)
+        new_total_weight = total_weight + item[1]
+        if new_total_weight <= B and better_item[0] + total_value > new_value:
+                best_item = better_item
+                new_value = better_item[0] + total_value
+        
+        """if a better item was found, add it to the knapsack"""
+        if better_item is not None:
+            allocation.append((better_item[5],better_item[2], better_item[4]))
+            total_value = new_value
+            total_weight += better_item[1]
+              
+    return total_value, allocation, selected_travels,nb_trajets, total_weight
+
+
     
-    """The possible trajects are define to find their cost (=weight) and their value = (utility)"""
+
+def eval_modified_solution(args):
+    selected_travels_set, feasible_item, travels, B = args
+    
+    """Find the travel with the lowest value/weight ratio"""
+    item = min(selected_travels_set, key=lambda x: travels[x[2]][0] / travels[x[2]][1])
+    
+    """Remove the travel with the lowest value/weight ratio"""
+    selected_travels_set.remove(item)
+    
+    """Add the feasible item"""
+    selected_travels_set.add(feasible_item)
+    
+    """Check if the modified solution is feasible"""
+    total_weight = sum(travels[item[2]][1] for item in selected_travels_set)
+    
+    if total_weight > B:
+        return (float("-inf"), None, None, None, None)
+    
+    """Calculate the total value of the modified solution"""
+    total_value = sum(travels[item[2]][0] for item in selected_travels_set)
+    
+    return (total_value, feasible_item, item, feasible_item, total_weight)
+
+
+def knapsack_greedy_local_search_smart(nb_road, nb_truck, B, max_iterations):
+    
+    """this algorithm uses the greedy method to find an allocation close to the best allocation. It firt classes the travel using a ratio  value/cost and takes the one with the 
+    best ratio, until the budget is completely used. it then used a smart local search to improve the solution. The smart local search involved a better selction of possible tracels and parallazideed solution
+    
+
+
+    Parameters :
+    -----------
+    nb_road: int
+        the number of the network studied
+    
+    nb_truck: int
+        the number of the studied truck file
+    B : int
+        the budget to buy the trucks
+
+    Outputs : 
+    -----------
+
+    total_value : int
+        the value of the allocation    
+    allocation : list
+        a list of the allocation, with the form (src, dest, model of the truck)
+    selected_travels : list
+        the list of travels of the allocation
+    nb_trajets: int
+        the number of trajets in the allocation
+    total_weight: int
+        the budget used
+    """
+    
+    """The possible trajects are defined to find their cost (=weight) and their value (=utility)"""
     travels, nb_travel = cost_traject(nb_road, nb_truck)
     list_travels = list(travels.values())
 
-    """initilization of the values"""
+    """Initialization of the values"""
     total_value, allocation, selected_travels, nb_trajets, total_weight = knapsack_greedy(nb_road, nb_truck, B)
     new_value = total_value
-    print("initilisation")
-    """perform local search"""
-    feasible_items = [t for t in list_travels if t not in selected_travels]
+    
+    """Convert selected_travels to a set for faster operations"""
+    selected_travels_set = set(selected_travels)
+    
+    """Perform local search"""
+    feasible_items = [t for t in list_travels if t not in selected_travels_set]
     for iteration in range(max_iterations):
         
-        item = random.choice(selected_travels)
-        selected_travels.remove(item)
+        """Remove the travel with lowest ratio of value to weight"""
+        item = min(selected_travels_set, key=lambda x: travels[x[2]][0] / travels[x[2]][1])
+        selected_travels_set.remove(item)
+        allocation.remove((item[5],item[2], item[4]))
         total_value -= travels[item[2]][0]
         total_weight -= travels[item[2]][1]
 
         remaining_weight = B - total_weight
-        print("a")
-        if feasible_items is not None:
-            item = random.choice(feasible_items)
-            allocation.append((item[4], item[2], item[5]))
-            selected_travels.append(item)
-            total_value += item[0]
-            total_weight += item[1]
-            
-            """evaluate the modified solution"""
-            if total_weight <= B and total_value > new_value:
-                new_value = total_value
-                feasible_items.remove(item)
         
+        """Sort feasible items by decreasing ratio of value to weight"""
+        feasible_items = sorted(feasible_items, key=lambda x: x[0] / x[1], reverse=True)
+        for item in feasible_items:
+            if item[1] <= remaining_weight:
+                selected_travels_set.add(item)
+                total_value += item[0]
+                total_weight += item[1]
+                remaining_weight = B - total_weight
+                
+                """Evaluate the modified solution using multiprocessing"""
+                with multiprocessing.Pool() as pool:
+                    results = pool.map(eval_modified_solution, [(selected_travels_set, t, travels, B) for t in feasible_items])
+                
+                """Update the best solution"""
+                for i, result in enumerate(results):
+                    if result[0] > new_value:
+                        new_value = result[0]
+                        feasible_items.pop(i)
+                        feasible_items.append(result[1])
+                        selected_travels_set.remove(result[2])
+                        allocation.remove((result[2][5],result[2][2], result[2][4]))
+                        selected_travels_set.add(result[3])
+                        allocation.append((result[3][5],result[3][2], result[3][4]))
+                        total_value = result[0]
+                        total_weight = result[4]
+                        break
+                        
+                break
     
-       
-    return new_value, allocation, selected_travels, nb_trajets, total_weight
+    """Convert selected_travels_set back to a list for consistency"""
+    selected_travels = list(selected_travels_set)
+    
+    
+    return total_value, allocation, selected_travels, nb_trajets, total_weight
