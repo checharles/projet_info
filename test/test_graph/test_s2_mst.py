@@ -10,7 +10,7 @@ data_path = "/home/onyxia/projet_info/"
 
 class Test_MST(unittest.TestCase):
     def test_network00(self):
-        g = graph_from_file(data_path + "input/network.00.in")
+        g = graph_from_file(data_path + "input/network_importation/network.00.in")
         g_mst = g.kruskal()
         mst_expected = {1: [(8, 0, 1), (2, 11, 1), (6, 12, 1)],
                         2: [(5, 4, 1), (3, 10, 1), (1, 11, 1)],
@@ -25,7 +25,7 @@ class Test_MST(unittest.TestCase):
         self.assertEqual(g_mst.graph, mst_expected)
 
     def test_network01(self):
-        g = graph_from_file(data_path +"input/network.05.in")
+        g = graph_from_file(data_path +"input/network_importation/network.05.in")
         g_mst = g.kruskal()
         mst_expected = {1: [(3, 2, 1), (4, 4, 1), (2, 6, 1)],
                         2: [(1, 6, 1)],
@@ -36,7 +36,7 @@ class Test_MST(unittest.TestCase):
 
 
     def test_network02(self):
-        g = graph_from_file(data_path +"input/network.04.in")
+        g = graph_from_file(data_path +"input/network_importation/network.04.in")
         g_mst = g.kruskal()
         mst_expected = {1: [(2, 4, 89)],
                         2: [(1, 4, 89), (3, 4, 3)],
@@ -52,7 +52,7 @@ class Test_MST(unittest.TestCase):
         self.assertEqual(g_mst.graph, mst_expected)
 
     def test_network1(self):
-        g = graph_from_file(data_path + "input/network.1.in")
+        g = graph_from_file(data_path + "input/network_importation/network.1.in")
         g_mst = g.kruskal()
         mst_expected = {1: [(2, 2, 6312.0), (5, 2, 1209.0), (14, 11, 231.0), (8, 13, 5452.0)],
                         2: [(1, 2, 6312.0), (3, 5, 6891.0), (13, 8, 7816.0)],

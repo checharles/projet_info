@@ -794,6 +794,8 @@ class Graph:
 
 
     def display_path(self, dest, src) : 
+
+        
         """this function displays the shortest path between the node src and the node dest
         
         Parameters : 
@@ -887,6 +889,8 @@ def graph_from_file(filename):
 
 def catalog_from_file(filename):
     '''
+    this fucntion loads the truck file and aoly keep the useful trucks
+
     Parameters: 
         -----------
         filename: str

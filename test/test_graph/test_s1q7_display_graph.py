@@ -11,7 +11,7 @@ sys.path.append("/home/onyxia/projet_info/delivery_network")
 from graph import Graph, graph_from_file
 
 
-data_path = "/home/onyxia/projet_info/input/"
+data_path = "/home/onyxia/projet_info/input/network_importation/"
 file_name = "network.05.in"
 
 g = graph_from_file(data_path + file_name)

@@ -1,6 +1,6 @@
 """definition of the input file"""
 import os
-os.chdir('/home/onyxia/projet_info/result')
+os.chdir('/home/onyxia/projet_info/result/allocation_result')
 print(os.getcwd())
 
 """importation"""
@@ -17,7 +17,7 @@ sys.path.append("/home/onyxia/projet_info/delivery_network")
 from graph import Graph, graph_from_file
 import trajet_truck 
 
-data_path = "/home/onyxia/projet_info/input/"
+
 
 
 """creation of a color palette with the help of a color map"""

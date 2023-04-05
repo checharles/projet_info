@@ -4,7 +4,7 @@
 from graph import Graph, graph_from_file, catalog_from_file
 
 
-data_path = "/home/onyxia/projet_info/input/"
+data_path = "/home/onyxia/projet_info/input/realistic_file"
 
 """the budget, which is a contraint"""
 B = 25*10**9

@@ -4,7 +4,7 @@
 """importation and creation of the outputfile"""
 from statistics import mean
 from graph import Graph, graph_from_file, catalog_from_file
-data_path = "/home/onyxia/projet_info/input/realistic"
+data_path = "/home/onyxia/projet_info/input/netw"
 
 
 

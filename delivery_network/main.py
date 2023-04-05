@@ -1,6 +1,7 @@
 """It is an illustration  of the class graph and its methods"""
+"""definition of the input file"""
 import os
-os.chdir('/home/onyxia/projet_info/result')
+os.chdir('/home/onyxia/projet_info/result/graph_display')
 print(os.getcwd())
 
 import sys
@@ -9,12 +10,12 @@ sys.path.append("/opt/mamba/lib/python3.10/site-packages")
 import graphviz 
 
 sys.path.pop()
-sys.path.append("/home/onyxia/projet_info/delivery_network")
+sys.path.append("/home/onyxia/projet_info/delivery_network/")
 from graph import Graph, graph_from_file
 
 
 
-data_path = "/home/onyxia/projet_info/input/"
+data_path = "/home/onyxia/projet_info/input/network_importation"
 file_name = "network.1.in"
 g = graph_from_file(data_path + file_name)
 

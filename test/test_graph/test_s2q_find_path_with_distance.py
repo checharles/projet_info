@@ -10,10 +10,10 @@ import unittest   # The test framework
 
 data_path = "/home/onyxia/projet_info/"
 
-class find_parent(unittest.TestCase):
+class Test_find_parent(unittest.TestCase):
 
     def test_network1(self):
-        g = graph_from_file(data_path + "input/network.1.in")
+        g = graph_from_file(data_path + "input/network_importation/network.1.in")
         g_mst = g.kruskal()
         depths, parents = Graph.search_parent(g_mst)
         self.assertEqual(Graph.find_path_with_distance(parents, depths, 6, 11)[0],[6, 17, 20, 8, 11])

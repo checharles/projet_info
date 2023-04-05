@@ -48,7 +48,7 @@ def cost_traject_gen(nb_road, nb_truck):
 
 	cost_and_power_truck = catalog_from_file(data_path + truck_model)
     
-	# Creation of the weight and value list
+	"""creation of the weight and value list"""
 
 	value = []
 	weight = []
@@ -80,6 +80,10 @@ def cost_traject_gen(nb_road, nb_truck):
 	return value, weight, nb_travel, list_travels
 
 def close_solution_with_greedy(nb_road, nb_truck,nb_travel, B) :
+	"""
+
+
+	"""
 	_,allocation, _, _, _ = trajet_truck.knapsack_greedy(nb_road, nb_truck, B)
 
 	individu = [0]*nb_travel
@@ -89,6 +93,14 @@ def close_solution_with_greedy(nb_road, nb_truck,nb_travel, B) :
 	return individu
 
 def generate_population(nb_road, nb_truck, size, nb_travel, B):
+	"""
+
+	Parameters:
+    -----------
+
+	Outputs :
+	-----------
+	"""
 	population = []
 	nb_super_individu = int(0.2*size)
 	for individu in range(size - 1- nb_super_individu):
@@ -151,10 +163,10 @@ def mutate(child, mutation_probabilty, nb_travel):
     return child
 
 def selection_elitist(population, fitness_values, n_elites):
-	# Sort the population and fitness_values lists by fitness value in descending order
+	"""Sort the population and fitness_values lists by fitness value in descending order"""
 	sorted_population = [x for _, x in sorted(zip(fitness_values, population), reverse=True)]
 	sorted_fitness = sorted(fitness_values, reverse=True)
-	# Select the n_elites best chromosomes
+	"""Select the n_elites best chromosomes"""
 	elites = sorted_population[:n_elites]
 	
 	return elites
@@ -162,7 +174,7 @@ def selection_elitist(population, fitness_values, n_elites):
 def	remplacement(population, fitness_values, n_elites, elites): 
 	sorted_population = [x for _, x in sorted(zip(fitness_values, population), reverse=True)]
 	population[-n_elites:] = elites
-	# Return the updated population
+	"""Return the updated population"""
 	return population
 
 def get_best(population,weight,value,B):

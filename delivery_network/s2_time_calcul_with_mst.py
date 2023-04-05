@@ -6,7 +6,7 @@ from statistics import mean
 
 
 
-data_path = "/home/onyxia/projet_info/input/"
+data_path = "/home/onyxia/projet_info/input/network_importation"
 
 """opening each file and calcuting the time. This time tehre is a preprocessing in the form of the creation of a minimun spanning tree within the graph. A very effective solution 
 can now be used to find the minimun power required to travel between two nodes. the results of the minimun power are written in a text file, called route.{i}.out, i being the number 
