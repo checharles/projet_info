@@ -194,7 +194,7 @@ def knapsack_greedy(nb_road, nb_truck, B):
 
 import random
 
-def knapsack_hill_climbing(nb_road, nb_truck, B, max_iterations=1000, num_neighbors=10):
+def knapsack_hill_climbing(nb_road, nb_truck, B, max_iterations=100, num_neighbors=10):
     """this algorithm uses the greedy method to find an allocation close to the best allocation. It firt classes the travel using a ratio  value/cost and takes the one with the 
     best ratio, until the budget is completely used. A local search using hill climbing is then used
     
@@ -244,15 +244,26 @@ def knapsack_hill_climbing(nb_road, nb_truck, B, max_iterations=1000, num_neighb
                 index = random.randint(0, len(new_allocation)-1)
                 travel = selected_travels[index]
                 new_travel = random.choice(list(travels.values()))
-                new_allocation[index] = (new_travel[5], int(new_travel[2]), new_travel[4])
+                if (new_travel[5], int(new_travel[2]), new_travel[4]) not in selected_travels:
+                    new_allocation[index] = (new_travel[5], int(new_travel[2]), new_travel[4])
             neighbors.append(new_allocation)
         
         """Evaluate the quality of each neighboring allocation"""
         neighbor_values = []
+        
         for neighbor in neighbors:
+            too_heavy = False
             value = 0
+            weight = 0
             for travel in neighbor:
                 value += travels[travel[2]][0]
+                weight += travels[travel[2]][1]
+                if weight >B:
+                    too_heavy = True
+            
+            if too_heavy is True:
+                value = 0
+        
             neighbor_values.append(value)
         
         """Select the best neighboring allocation"""
