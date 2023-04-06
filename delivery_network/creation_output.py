@@ -4,8 +4,10 @@
 """importation and creation of the outputfile"""
 from statistics import mean
 from graph import Graph, graph_from_file, catalog_from_file
-data_path = "/home/onyxia/projet_info/input/netw"
-
+data_path = "/home/onyxia/projet_info/input/network_importation/"
+import sys 
+sys.path.pop()
+sys.path.append("/home/onyxia/projet_info/delivery_network/")
 
 
 """opening each file and calcuting the time """

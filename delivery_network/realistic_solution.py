@@ -4,7 +4,7 @@
 from graph import Graph, graph_from_file, catalog_from_file
 
 
-data_path = "/home/onyxia/projet_info/input/realistic_file"
+data_path = "/home/onyxia/projet_info/input/"
 
 """the budget, which is a contraint"""
 B = 25*10**9
@@ -12,7 +12,7 @@ B = 25*10**9
 
 from statistics import mean
 
-data_path = "/home/onyxia/projet_info/input/realistic_file"
+data_path = "/home/onyxia/projet_info/input/"
 
 """opening each file and calcuting the time """
 
@@ -184,6 +184,34 @@ def cost_traject_realistic(nb_road, nb_truck):
 
 
 def knapsack_greedy_realistic(nb_road, nb_truck, B):
+    """the classic greedy algorithm is now use to solve the problem
+    this algorithm uses the greedy method to find an allocation close to the best allocation. It firt classes the travel using a ratio  value/cost and takes the one with the 
+    best ratio, until the budget is completely used.    
+    
+    Parameters :
+    -----------
+    nb_road: int
+        the number of the network studied
+    
+    nb_truck: int
+        the number of the studied truck file
+    B : int
+        the budget to buy the trucks
+
+    Outputs : 
+    -----------
+    total_value : int
+        the value of the allocation    
+     allocation : list
+        a list of the allocation, with the form (src, dest, model of the truck)
+     selected_travels : list
+        the list of travels of the allocation
+    nb_trajets: int
+        the number of trajets in the allocation
+    total_weight: int
+        the budget used
+    """
+
     travels, nb_travel = cost_traject_realistic(nb_road, nb_truck)
     
     ratios = [(travels[i][0] / travels[i][1], i) for i in range(1, nb_travel + 1)]
@@ -202,3 +230,4 @@ def knapsack_greedy_realistic(nb_road, nb_truck, B):
     return total_value, selected_travels, nb_trajets, total_weight
 
 
+print(knappsack_greedy_realistic(1,1,B))
