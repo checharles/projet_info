@@ -12,7 +12,7 @@ Dans le pire des cas, l'algorithme parcourt l'ensemble des noeuds du graphe. La 
 
 Question 5 :
 
-On utilise l'algorythme de Djikistra. On parcourt tout les noeuds et toutes les arrêtes. Il y a un test binaire pour déterminer si le noeud doit être ajouté au chemin.
+On utilise l'algorithme de Djikistra. On parcourt tout les noeuds et toutes les arrêtes. Il y a un test binaire pour déterminer si le noeud doit être ajouté au chemin.
 La complexité est donc polynomiale et vaut O((E+V)log(E)).
 
 Question 6 :

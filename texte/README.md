@@ -1,21 +1,24 @@
 # ENSAE 1A : projet de programmation
 
-Ce dépôt public contient les ressources pour les étudiants pour le projet de programmation 1A sur l'optimisation d'un réseau de livraison. Pour la description du projet lui-même, se référer au PDF sur pamplemousse. 
+
+Ce dépôt contient le projet informatique sur l'optimisation d'un réseau de livraison de LAGIER Charles et de Lauze Tony, en 1A ENSAE. 
+
 
 Ce dépôt contient plusieurs dossiers et fichiers : 
-- le dossier `delivery_network` contient le code principal (une base de code pour l'instant, que vous devrez compléter). C'est là qu'est la classe Graph que vous devez implémenter. C'est aussi là que vous mettrez les autres fichiers .py principaux au cours du projet. 
-- le dossier 'inputs' contient des jeux de données (graphes et ensembles de trajets) 
-- le dossier 'tests' contient les tests unitaires (des exemples, à vous d'en faire d'autres !)
+- le dossier `delivery_network` contient le code principal 
+    - C'est là qu'est la classe Graph est implémentée, dans le fichier `graph`. 
+    - Le ficher `trajey_truk` contient des programmes permetant de trouver des allocations répondant au problème.
+    - les fichiers `s2_time_calcul_with_mst` et `séance2_time_calcul` sont des programmes trouvant les puissances minimuns nécessaires à la résolution du problème
+    - le fichier `Unionfind` permet l'implémentationde la classe UnionFind 
+    - les fichiers `creation_output` et `realistic_solution` permettent de traiter le cas réaliste
+    - le fichier `algo_gen` est une implémentation d'un algorithme génétique utiliser pour résoudre le problème
+    - le fichier `visual_presentation` permet d'obtenir des résulats graphiques
+        
+- le dossier `inputs` contient des jeux de données (graphes et ensembles de trajets) 
+    - le dossier `truck` contient le catalogue de camion
+    - le dossier `network_importation` contient les fichiers de graphes et des routes associées
+- le dossier `tests` contient les tests unitaires
+- le dossier `texte` contient plusieurs documents texte explicatant certains aspects du programme
+- le dossier `result` contient les résulats graphiques
 - le fichier `install_graphviz.sh` permet d'installer graphviz sur sspcloud
-
-## Format des fichiers d'input
-
-Le dossier input contient 2 types de fichiers : les fichiers network.x.in ($x \in \{00, 01, 02, 03, 04, 1, ..., 10\}$) qui contiennent les graphes et les fichiers routes.x.in ($x \in \{1, ..., 10\}$) qui contiennent des ensembles de trajets pour les graphes de $x$ correspondant. 
-
-La structure des fichiers network.x.in est la suivante : 
-- la première ligne est composée de deux entiers séparés par un espace : le nombre de sommets (n) et le nombre d'arêtes (m)
-- les m lignes suivantes représentent chacune une arête et sont composées de 3 ou 4 nombres séparés par des espaces : `ville1 ville2 puissance [distance]`, où `ville1` et `ville2` sont les sommets de l'arête, puissance est la puissance minimale requise pour passer sur l'arête, et distance (optionnel) est la distance entre `ville1` et `ville2` sur l'arête. 
-
-La structure des fichiers routes.x.in est la suivante : 
-- la première ligne contient un entier qui correspond aux nombres de trajets dans l'ensemble (T)
-- les T lignes suivantes contiennent chacune un trajet sous la forme `ville1 ville2 utilité`, où utilité est le profit acquis si le trajet correspondant est couvert. 
+`
