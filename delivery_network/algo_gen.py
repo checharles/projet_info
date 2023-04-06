@@ -108,9 +108,9 @@ def close_solution_with_greedy(nb_road, nb_truck,nb_travel, B):
 	_,allocation, _, _, _ = trajet_truck.knapsack_greedy(nb_road, nb_truck, B)
 
 	"""creation of the individu"""
-	individu = [0]*nb_travel
+	individual = [0]*nb_travel
 	for travel in allocation : 
-		individu[travel[2] - 1] = 1
+		individual[travel[2] - 1] = 1
 
 	return individual
 
@@ -478,7 +478,7 @@ def simulation(nb_road, nb_truck, size_population, mutation_probability, number_
 B = 25*10**9
 
 result = simulation(10, 2, 10, 0.1, 10, 0.01, B)
-result_control = trajet_truck.knapsack_greedy(10	, 2, B)
+result_control = trajet_truck.knapsack_greedy(1, 2, B)
 print(result[0])
 print(result_control[0])
 print(result[2])

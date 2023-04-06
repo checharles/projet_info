@@ -910,11 +910,12 @@ def catalog_from_file(filename):
             trucks.append((int(power), int(cost)))
     file.close()
 
-    """we only want to keep the cheapest truck for a given power"""
+    """for a given power, we only want to keep the cheapest truck, thus we sort the list in increasing order for the power,
+    and in decreasing order for the price at a given power"""
     trucks.sort(key = lambda x: (x[0], -x[1]))
 
-    #then we read the list backwards, and only keep a truck if it is cheaper (if it's not, 
-    # it means the truck is not interesting, given the way we sorted the list, )
+    '''then we read the list backwards, and only keep a truck if it is cheaper (if it's not, 
+    it means the truck is not interesting, given the way we sorted the list)'''
     trucks_filtered = [trucks[-1]]
     for elt in trucks[-2::-1]:
         if elt[1] < trucks_filtered[-1][1]:

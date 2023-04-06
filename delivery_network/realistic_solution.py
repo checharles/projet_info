@@ -1,4 +1,4 @@
-"""this program implement a realistic solution to the problem; using a gredy algorythm"""
+"""this program implement a realistic solution to the problem; using a greedy algorythm"""
 
 
 from graph import Graph, graph_from_file, catalog_from_file

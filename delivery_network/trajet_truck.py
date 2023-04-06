@@ -10,7 +10,7 @@ truck_path = "/home/onyxia/projet_info/input/truck/"
 
 
 def cost_traject(nb_road, nb_truck):
-    """this function define the value of a travel and  the cost of the truck to use it
+    """this function define the value of a travel and the cost of the truck to use it
 
     Parameters :
     -----------

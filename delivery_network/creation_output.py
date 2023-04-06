@@ -1,4 +1,4 @@
-"""this file contains a programm craeting the file needed for the realistic_solution programm"""
+"""this file contains a programm creating the file needed for the realistic_solution programm"""
 
 
 """importation and creation of the outputfile"""
